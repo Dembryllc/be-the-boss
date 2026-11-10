@@ -8,7 +8,8 @@ main{max-width:none;padding:0}
 .screen.is-active{display:block !important}
 
 .cert-sheet{box-shadow:none;border-radius:0;padding:0;margin:0;page-break-inside:avoid}
-.cert-border{border:4px double #B07A1E;padding:14mm 12mm}
+.cert-border{border:4px double #B07A1E;padding:14mm 12mm;
+  min-height:235mm;display:flex;flex-direction:column;justify-content:center;gap:2mm}
 .cert-title{font-size:26pt;margin:2mm 0 3mm}
 .cert-name{font-size:20pt;color:#000}
 .cert-eyebrow{font-size:8pt}
@@ -18,4 +19,6 @@ main{max-width:none;padding:0}
 #cert-canvas{width:46mm;height:46mm;border:1px solid #999}
 .cert-facts dl{font-size:11pt}
 .cert-sign{margin-top:12mm}
+.cert-seal{width:22mm;height:22mm}
+.step-art{display:none}
 .sign-line{width:55mm;border-bottom:1.5pt solid #000}

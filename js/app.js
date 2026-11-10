@@ -14,11 +14,15 @@
   var STOPS = { 1: [80, 110], 2: [285, 80], 3: [490, 110], 4: [695, 80], 5: [900, 110] };
 
   /* ---------- toast ---------- */
-  var toastTimer = null;
-  function toast(msg) {
+  var toastTimer = null, toastLockUntil = 0;
+  // `important` holds the message on screen for a moment, so a routine
+  // message right after it cannot wipe out a celebration.
+  function toast(msg, important) {
+    if (!important && Date.now() < toastLockUntil) return;
     var el = $('#toast');
     el.textContent = msg;
     el.classList.add('is-up');
+    if (important) toastLockUntil = Date.now() + 1800;
     clearTimeout(toastTimer);
     toastTimer = setTimeout(function () { el.classList.remove('is-up'); }, 2600);
   }
@@ -123,7 +127,7 @@
   /* ---------- confetti ---------- */
   var confettiRunning = false;
   function confetti() {
-    if (reduceMotion) { toast('🎉 Hooray! You made a profit!'); return; }
+    if (reduceMotion) { toast('🎉 Hooray! You made a profit!', true); return; }
     if (confettiRunning) return;
     confettiRunning = true;
 
@@ -218,6 +222,15 @@
         btn.classList.add('is-speaking');
         btn.textContent = '⏹ Stop';
         synth.speak(u);
+
+        // Some computers have speech turned off. If nothing has started
+        // shortly after, put the button back instead of leaving it stuck.
+        setTimeout(function () {
+          if (active === btn && !synth.speaking && !synth.pending) {
+            clearActive();
+            toast('Read Aloud is not available on this computer.');
+          }
+        }, 1200);
       });
     });
 
@@ -233,6 +246,54 @@
       if (window.speechSynthesis) window.speechSynthesis.cancel();
       S.reset();
       location.reload();
+    });
+  }
+
+  /* ---------- optional pictures from the assets folder ----------
+     Every slot is optional: if the file is not there, nothing changes
+     and the drawn-in-browser art stays exactly as it is. */
+  function wireOptionalArt() {
+    function ifPresent(src, use) {
+      var img = new Image();
+      img.onload = function () { use(img); };
+      img.onerror = function () { /* no file: keep the built-in art */ };
+      img.src = src;
+    }
+
+    ifPresent('assets/trail-background.png', function () {
+      var wrap = $('.trail-wrap');
+      wrap.style.backgroundImage = 'url("assets/trail-background.png")';
+      wrap.style.backgroundSize = 'cover';
+      wrap.style.backgroundPosition = 'center';
+    });
+
+    for (var n = 1; n <= 5; n++) {
+      (function (step) {
+        ifPresent('assets/step-' + step + '.png', function () {
+          var card = $('#screen-' + step + ' .card');
+          if (!card || $('.step-art', card)) return;
+          var pic = document.createElement('img');
+          pic.className = 'step-art';
+          pic.src = 'assets/step-' + step + '.png';
+          pic.alt = '';                      // decoration: the words carry the meaning
+          card.insertBefore(pic, $('.card-head', card).nextSibling);
+        });
+      })(n);
+    }
+
+    ifPresent('assets/boss.png', function () {
+      var w = $('#walker');
+      w.innerHTML = '<image href="assets/boss.png" x="-26" y="-80" width="52" height="52"/>';
+    });
+
+    ifPresent('assets/certificate-seal.png', function () {
+      var border = $('.cert-border');
+      if (!border || $('.cert-seal', border)) return;
+      var pic = document.createElement('img');
+      pic.className = 'cert-seal';
+      pic.src = 'assets/certificate-seal.png';
+      pic.alt = '';
+      border.appendChild(pic);
     });
   }
 
@@ -257,6 +318,7 @@
 
     wireReadAloud();
     wireStartOver();
+    wireOptionalArt();
 
     // keep the done flags honest after a reload
     for (var i = 1; i <= 5; i++) S.data.done[i] = S.isDone(i);

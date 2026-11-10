@@ -16,6 +16,11 @@ If you add a file with one of the names below, the app will use it instead.
 | `boss.png`               | Replaces the little shop-owner character           |
 | `certificate-seal.png`   | A seal on the printable certificate                |
 
+Just drop the file in with the right name and reload the page — there is
+nothing to edit. While a slot is empty the browser's console shows a harmless
+`404` for that file name; that is the app checking whether you added it yet,
+and students never see it.
+
 **Sizes that work well**
 
 - `trail-background.png` — 2000 × 300 px, PNG with transparency

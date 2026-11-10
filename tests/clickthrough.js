@@ -18,7 +18,7 @@ async function canvasInk(page, sel) {
     const d = ctx.getImageData(0, 0, c.width, c.height).data;
     let n = 0;
     for (let i = 0; i < d.length; i += 4) {
-      if (d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245) n++;
+      if (d[i + 3] > 8 && (d[i] < 245 || d[i + 1] < 245 || d[i + 2] < 245)) n++;
     }
     return n;
   }, sel);
@@ -29,7 +29,14 @@ async function runLevel(browser, level) {
   const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 }, acceptDownloads: true });
   const page = await ctx.newPage();
   const errors = [];
-  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  // A missing optional picture in /assets logs a harmless 404. That is the
+  // drop-in design, so ignore those and fail on anything else.
+  page.on('console', (m) => {
+    if (m.type() !== 'error') return;
+    const from = (m.location() && m.location().url) || '';
+    if (from.includes('/assets/')) return;
+    errors.push(m.text() + ' @ ' + from);
+  });
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
 
   await page.goto(URL);
@@ -338,9 +345,92 @@ async function screenshots(browser) {
   }
 }
 
+/* ---- reduced motion: no confetti, no animation, still usable ---- */
+async function reducedMotion(browser) {
+  console.log('\n=== REDUCED MOTION ===');
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 },
+    reducedMotion: 'reduce' });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto(URL);
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+
+  await page.evaluate(() => App.go(5));
+  await page.click('#s5-list tbody tr[data-id="poster"] button[data-d="1"]');
+  await page.fill('#s5-price', '5');
+  await page.fill('#s5-sold', '4');
+  check('profit still works with reduced motion', (await page.textContent('#s5-profit')) === '$19');
+  await page.waitForTimeout(400);
+  const ink = await canvasInk(page, '#confetti-canvas');
+  check('no confetti is drawn with reduced motion', ink === 0, 'ink ' + ink);
+  check('the celebration is still announced',
+    (await page.textContent('#toast')).includes('profit'), await page.textContent('#toast'));
+  const anim = await page.evaluate(() =>
+    getComputedStyle(document.querySelector('.screen.is-active')).animationDuration);
+  check('screen animation is switched off', parseFloat(anim) < 0.01, anim);
+  check('no page errors with reduced motion', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
+/* ---- keyboard only: a student can tab to the controls and press them ---- */
+async function keyboard(browser) {
+  console.log('\n=== KEYBOARD ===');
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 } });
+  const page = await ctx.newPage();
+  await page.goto(URL);
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+  await page.evaluate(() => App.go(1));
+
+  await page.focus('.kind-card[data-kind="Do It"]');
+  await page.keyboard.press('Enter');
+  check('a kind card works from the keyboard',
+    (await page.getAttribute('.kind-card[data-kind="Do It"]', 'aria-pressed')) === 'true');
+
+  await page.focus('#s1-sells');
+  await page.keyboard.type('dog walking');
+  check('typing works', (await page.inputValue('#s1-sells')) === 'dog walking');
+
+  await page.evaluate(() => App.go(2));
+  await page.focus('#s2-checklist li[data-check="read"]');
+  await page.keyboard.press(' ');
+  check('the checklist row toggles with the space bar',
+    (await page.getAttribute('#s2-checklist li[data-check="read"]', 'aria-checked')) === 'true');
+
+  // every tap target on every screen must be at least 48 x 48
+  const small = [];
+  for (const n of [0, 1, 2, 3, 4, 5, 6, 7]) {
+    await page.evaluate((s) => App.go(s), n);
+    await page.waitForTimeout(120);
+    const bad = await page.evaluate(() => {
+      const out = [];
+      document.querySelectorAll('.screen.is-active button, .screen.is-active input, ' +
+        '.screen.is-active select, .screen.is-active [role=checkbox], .site-head button')
+        .forEach((el) => {
+          const r = el.getBoundingClientRect();
+          if (!r.width || !r.height) return;
+          // a small control inside a big label still has a big tap area
+          const lab = el.closest('label');
+          const h = lab ? Math.max(r.height, lab.getBoundingClientRect().height) : r.height;
+          const w = lab ? Math.max(r.width, lab.getBoundingClientRect().width) : r.width;
+          if (h < 48 || w < 48) out.push((el.id || el.className || el.tagName) +
+            ' ' + Math.round(w) + 'x' + Math.round(h));
+        });
+      return out;
+    });
+    bad.forEach((b) => small.push('screen ' + n + ': ' + b));
+  }
+  check('every tap target on every screen is at least 48px', small.length === 0, small.join(' | '));
+  await ctx.close();
+}
+
 (async () => {
   const browser = await chromium.launch();
   for (const level of LEVELS) await runLevel(browser, level);
+  await reducedMotion(browser);
+  await keyboard(browser);
   await budgetMath(browser);
   await screenshots(browser);
   await browser.close();
