@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Be the Boss!</title>
+<meta name="description" content="Create a pretend business: big idea, name and logo, slogan, customers, and budget.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/print.css" media="print">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E%F0%9F%8F%AA%3C/text%3E%3C/svg%3E">
+</head>
+<body class="level-ontrack">
+
+<a class="skip-link" href="#main">Skip to the activity</a>
+
+<!-- ============ HEADER: title, level toggle, start over ============ -->
+<header class="site-head">
+  <div class="brand">
+    <!-- Original inline SVG: a little market stall -->
+    <svg class="brand-mark" viewBox="0 0 64 64" role="img" aria-label="A market stall">
+      <rect x="10" y="30" width="44" height="24" rx="4" fill="#FFE2A8"/>
+      <rect x="10" y="44" width="44" height="10" rx="3" fill="#F2C878"/>
+      <path d="M6 30 L12 14 H52 L58 30 Z" fill="#FF6B5B"/>
+      <path d="M6 30 h13 l2 -16 h-7 Z" fill="#FFF3DC" opacity=".55"/>
+      <path d="M32 30 h13 l-6 -16 h-7 Z" fill="#FFF3DC" opacity=".55"/>
+      <circle cx="32" cy="42" r="5" fill="#35C9A3"/>
+    </svg>
+    <h1>Be the Boss!</h1>
+  </div>
+
+  <div class="head-tools">
+    <div class="level-toggle" role="group" aria-label="Choose your level">
+      <span class="level-label" aria-hidden="true">Level:</span>
+      <button type="button" class="level-btn" data-level="guided" aria-pressed="false">Guided</button>
+      <button type="button" class="level-btn" data-level="ontrack" aria-pressed="true">On Track</button>
+      <button type="button" class="level-btn" data-level="stretch" aria-pressed="false">Stretch</button>
+    </div>
+    <button type="button" id="start-over" class="btn btn-quiet">↺ Start over</button>
+  </div>
+</header>
+
+<!-- ============ TRAIL MAP ============ -->
+<div class="trail-wrap">
+  <h2 class="sr-only">Your trail</h2>
+  <svg class="trail" viewBox="0 0 1000 150" role="img"
+       aria-label="A trail with five stops: Big Idea, Name and Logo, Slogan, Customers, Budget.">
+    <!-- the path -->
+    <path class="trail-path" d="M80,110 Q182,45 285,80 Q387,135 490,110 Q592,45 695,80 Q797,135 900,110"
+          fill="none" stroke="#E8D7BC" stroke-width="12" stroke-linecap="round" stroke-dasharray="2 20"/>
+    <!-- five stops -->
+    <g class="trail-stop" data-stop="1" transform="translate(80,110)">
+      <circle r="22" class="stop-dot"/><text class="stop-num" y="8" text-anchor="middle">1</text>
+      <text class="stop-name" y="46" text-anchor="middle">Big Idea</text>
+    </g>
+    <g class="trail-stop" data-stop="2" transform="translate(285,80)">
+      <circle r="22" class="stop-dot"/><text class="stop-num" y="8" text-anchor="middle">2</text>
+      <text class="stop-name" y="46" text-anchor="middle">Name &amp; Logo</text>
+    </g>
+    <g class="trail-stop" data-stop="3" transform="translate(490,110)">
+      <circle r="22" class="stop-dot"/><text class="stop-num" y="8" text-anchor="middle">3</text>
+      <text class="stop-name" y="46" text-anchor="middle">Slogan</text>
+    </g>
+    <g class="trail-stop" data-stop="4" transform="translate(695,80)">
+      <circle r="22" class="stop-dot"/><text class="stop-num" y="8" text-anchor="middle">4</text>
+      <text class="stop-name" y="46" text-anchor="middle">Customers</text>
+    </g>
+    <g class="trail-stop" data-stop="5" transform="translate(900,110)">
+      <circle r="22" class="stop-dot"/><text class="stop-num" y="8" text-anchor="middle">5</text>
+      <text class="stop-name" y="46" text-anchor="middle">Budget</text>
+    </g>
+    <!-- the shop owner character: original simple shapes -->
+    <g id="walker" class="walker" transform="translate(80,110)">
+      <g transform="translate(0,-52)">
+        <ellipse cx="0" cy="20" rx="14" ry="4" fill="#000" opacity=".12"/>
+        <rect x="-10" y="-2" width="20" height="22" rx="7" fill="#4B7BEC"/>
+        <rect x="-9" y="6" width="18" height="14" rx="4" fill="#FFF3DC"/>
+        <circle cx="0" cy="-12" r="10" fill="#FFD9A8"/>
+        <path d="M-11 -14 a11 9 0 0 1 22 0 z" fill="#5B3B2E"/>
+        <circle cx="-3.5" cy="-12" r="1.6" fill="#2B2342"/>
+        <circle cx="3.5" cy="-12" r="1.6" fill="#2B2342"/>
+        <path d="M-3.5 -7 q3.5 3 7 0" stroke="#2B2342" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<main id="main">
+
+<!-- ============ WELCOME ============ -->
+<section class="screen is-active" id="screen-0" aria-label="Welcome">
+  <div class="card card-welcome">
+    <div class="card-head">
+      <h2>Welcome, boss! 👋</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">You are going to build a pretend business in five steps. Pick a nickname to get started.</p>
+
+    <div class="privacy-note">
+      <strong>🔒 Use a nickname, not your real name.</strong>
+      <span>Never type your last name. Everything you make stays on this computer only.</span>
+    </div>
+
+    <label class="field">
+      <span class="field-label">My boss nickname</span>
+      <input type="text" id="nickname" maxlength="18" placeholder="Example: Captain Lemon" autocomplete="off">
+    </label>
+
+    <div class="choice-row guided-only" data-fills="#nickname">
+      <button type="button" class="chip">Captain Lemon</button>
+      <button type="button" class="chip">Chef Sparkle</button>
+      <button type="button" class="chip">Boss Bubbles</button>
+      <button type="button" class="chip">Coach Comet</button>
+      <button type="button" class="chip">Doctor Fix-It</button>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <span></span>
+    <button type="button" class="btn btn-next" data-go="1">Let's go! →</button>
+  </nav>
+</section>
+
+<!-- ============ STEP 1: BIG IDEA ============ -->
+<section class="screen" id="screen-1" data-step="1" aria-label="Step 1: Big Idea" hidden>
+  <div class="card">
+    <div class="card-head">
+      <h2><span class="step-pill">Step 1</span> Big Idea 💡</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">Every business does one of three jobs. Pick the kind of business you want to be.</p>
+
+    <div class="kind-grid" role="group" aria-label="Pick a kind of business">
+      <button type="button" class="kind-card" data-kind="Make It">
+        <span class="kind-emoji" aria-hidden="true">🧁</span>
+        <span class="kind-name">Make It</span>
+        <span class="kind-desc">You make something, then sell it.</span>
+        <span class="kind-ex">Slime, bracelets, cupcakes, comics</span>
+      </button>
+      <button type="button" class="kind-card" data-kind="Do It">
+        <span class="kind-emoji" aria-hidden="true">🧹</span>
+        <span class="kind-name">Do It</span>
+        <span class="kind-desc">You do a job for someone.</span>
+        <span class="kind-ex">Dog walking, car washing, leaf raking</span>
+      </button>
+      <button type="button" class="kind-card" data-kind="Fix It">
+        <span class="kind-emoji" aria-hidden="true">🔧</span>
+        <span class="kind-name">Fix It</span>
+        <span class="kind-desc">You fix a problem people have.</span>
+        <span class="kind-ex">Bike tune-ups, tangled-cord helper</span>
+      </button>
+    </div>
+
+    <h3>Now finish the sentence</h3>
+    <p class="hint">Sentence starter: <em>My business sells cool slime for kids in my class because it is fun to squish.</em></p>
+
+    <div class="frame">
+      <span class="frame-text">My business sells</span>
+      <label class="blank">
+        <span class="sr-only">what you sell</span>
+        <input type="text" id="s1-sells" placeholder="what you sell" autocomplete="off">
+      </label>
+      <div class="choice-row guided-only" data-fills="#s1-sells">
+        <button type="button" class="chip">colorful slime</button>
+        <button type="button" class="chip">friendship bracelets</button>
+        <button type="button" class="chip">dog walking</button>
+        <button type="button" class="chip">bike fix-ups</button>
+        <button type="button" class="chip">tasty cookies</button>
+      </div>
+
+      <span class="frame-text">for</span>
+      <label class="blank">
+        <span class="sr-only">who it is for</span>
+        <input type="text" id="s1-for" placeholder="who it is for" autocomplete="off">
+      </label>
+      <div class="choice-row guided-only" data-fills="#s1-for">
+        <button type="button" class="chip">kids in my class</button>
+        <button type="button" class="chip">families at school</button>
+        <button type="button" class="chip">dog owners</button>
+        <button type="button" class="chip">teachers</button>
+      </div>
+
+      <span class="frame-text">because</span>
+      <label class="blank">
+        <span class="sr-only">why they want it</span>
+        <input type="text" id="s1-because" placeholder="why they want it" autocomplete="off">
+      </label>
+      <div class="choice-row guided-only" data-fills="#s1-because">
+        <button type="button" class="chip">it is fun to squish</button>
+        <button type="button" class="chip">everybody needs one</button>
+        <button type="button" class="chip">it saves them time</button>
+        <button type="button" class="chip">it makes people smile</button>
+      </div>
+    </div>
+
+    <div class="wordbank">
+      <h4>Word bank <span class="wb-tip">Tap a word to add it</span></h4>
+      <div class="choice-row" data-fills="focused">
+        <button type="button" class="chip chip-word">fun</button>
+        <button type="button" class="chip chip-word">tasty</button>
+        <button type="button" class="chip chip-word">helpful</button>
+        <button type="button" class="chip chip-word">cool</button>
+        <button type="button" class="chip chip-word">colorful</button>
+        <button type="button" class="chip chip-word">fast</button>
+        <button type="button" class="chip chip-word">safe</button>
+        <button type="button" class="chip chip-word">handmade</button>
+        <button type="button" class="chip chip-word">special</button>
+      </div>
+    </div>
+
+    <div class="sentence-preview" id="s1-preview" aria-live="polite"></div>
+
+    <div class="challenge">
+      <h4>⭐ Challenge</h4>
+      <p>Name one other business that already sells something like yours. How will yours be different?</p>
+      <label class="field"><span class="field-label">My business is different because…</span>
+        <input type="text" id="s1-challenge" autocomplete="off"></label>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button type="button" class="btn btn-back" data-go="0">← Back</button>
+    <button type="button" class="btn btn-next" data-go="2">Next →</button>
+  </nav>
+</section>
+
+<!-- ============ STEP 2: NAME AND LOGO ============ -->
+<section class="screen" id="screen-2" data-step="2" aria-label="Step 2: Name and Logo" hidden>
+  <div class="card">
+    <div class="card-head">
+      <h2><span class="step-pill">Step 2</span> Name &amp; Logo 🎨</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">A good name is easy to say and easy to remember. Try the name recipe.</p>
+
+    <div class="recipe">
+      <h3>Name recipe: describing word + thing word</h3>
+      <p class="hint">Sentence starter: Sunny + Slime + Shop = <em>Sunny Slime Shop</em></p>
+      <div class="recipe-row">
+        <label class="field">
+          <span class="field-label">Describing word</span>
+          <select id="s2-adj">
+            <option value="">choose…</option>
+            <option>Sunny</option><option>Happy</option><option>Speedy</option><option>Shiny</option>
+            <option>Mighty</option><option>Cozy</option><option>Lucky</option><option>Bouncy</option>
+            <option>Super</option><option>Tiny</option>
+          </select>
+        </label>
+        <span class="plus" aria-hidden="true">+</span>
+        <label class="field">
+          <span class="field-label">Thing word</span>
+          <select id="s2-noun">
+            <option value="">choose…</option>
+            <option>Slime</option><option>Cookie</option><option>Bracelet</option><option>Dog</option>
+            <option>Bike</option><option>Bubble</option><option>Comic</option><option>Garden</option>
+            <option>Snack</option><option>Sticker</option>
+          </select>
+        </label>
+        <span class="plus" aria-hidden="true">+</span>
+        <label class="field">
+          <span class="field-label">Ending</span>
+          <select id="s2-end">
+            <option>Shop</option><option>Co.</option><option>Crew</option><option>Club</option>
+            <option>Works</option><option>Stand</option><option>Squad</option>
+          </select>
+        </label>
+        <button type="button" class="btn btn-mini" id="s2-use-recipe">Use this name</button>
+      </div>
+    </div>
+
+    <label class="field field-big">
+      <span class="field-label">My business name</span>
+      <input type="text" id="s2-name" maxlength="28" placeholder="Sunny Slime Shop" autocomplete="off">
+    </label>
+
+    <h3>Logo maker</h3>
+    <div class="logo-rules">
+      <strong>Logo rules:</strong>
+      <ul>
+        <li>1 picture only</li>
+        <li>3 colors or fewer</li>
+        <li>Readable from across the room</li>
+      </ul>
+    </div>
+
+    <div class="logo-lab">
+      <div class="logo-controls">
+        <fieldset>
+          <legend>Shape</legend>
+          <div class="pick-row" id="s2-shapes"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Picture (pick 1)</legend>
+          <div class="pick-row" id="s2-icons"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Colors (pick up to 3) <span class="count" id="s2-color-count">0 of 3</span></legend>
+          <div class="pick-row" id="s2-colors"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Name font</legend>
+          <div class="pick-row" id="s2-fonts"></div>
+        </fieldset>
+      </div>
+
+      <div class="logo-stage">
+        <canvas id="logo-canvas" width="440" height="440" role="img"
+                aria-label="Your logo preview"></canvas>
+        <button type="button" class="btn btn-mini" id="s2-download">⬇ Download logo (PNG)</button>
+      </div>
+    </div>
+
+    <div class="checklist" id="s2-checklist">
+      <h4>Logo checklist</h4>
+      <ul>
+        <li data-check="name">My business has a name</li>
+        <li data-check="icon">I used only 1 picture</li>
+        <li data-check="colors">I used 3 colors or fewer</li>
+        <li data-check="read">I can read it from across the room</li>
+      </ul>
+    </div>
+
+    <div class="challenge">
+      <h4>⭐ Challenge</h4>
+      <p>Say your name out loud 3 times fast. Is it easy to say? Write a shorter nickname for your business.</p>
+      <label class="field"><span class="field-label">Short version</span>
+        <input type="text" id="s2-challenge" maxlength="20" autocomplete="off"></label>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button type="button" class="btn btn-back" data-go="1">← Back</button>
+    <button type="button" class="btn btn-next" data-go="3">Next →</button>
+  </nav>
+</section>
+
+<!-- ============ STEP 3: SLOGAN ============ -->
+<section class="screen" id="screen-3" data-step="3" aria-label="Step 3: Slogan" hidden>
+  <div class="card">
+    <div class="card-head">
+      <h2><span class="step-pill">Step 3</span> Slogan 📣</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">A slogan is a short line people remember. Pick a trick, then write three slogans.</p>
+
+    <div class="trick-grid" role="group" aria-label="Pick a slogan trick">
+      <button type="button" class="trick-card" data-trick="Rhyme">
+        <span class="trick-emoji" aria-hidden="true">🎵</span>
+        <span class="trick-name">Rhyme</span>
+        <span class="trick-ex">"Our slime is prime!"</span>
+      </button>
+      <button type="button" class="trick-card" data-trick="Same starting sound">
+        <span class="trick-emoji" aria-hidden="true">🔁</span>
+        <span class="trick-name">Same starting sound</span>
+        <span class="trick-ex">"Super soft slime, speedy service."</span>
+      </button>
+      <button type="button" class="trick-card" data-trick="Command">
+        <span class="trick-emoji" aria-hidden="true">👉</span>
+        <span class="trick-name">Command</span>
+        <span class="trick-ex">"Squish the day away!"</span>
+      </button>
+      <button type="button" class="trick-card" data-trick="Question">
+        <span class="trick-emoji" aria-hidden="true">❓</span>
+        <span class="trick-name">Question</span>
+        <span class="trick-ex">"Need a smile? Grab some slime."</span>
+      </button>
+    </div>
+
+    <h3>Write 3 slogans, then tap the winner 🏆</h3>
+    <p class="hint">Sentence starters: "The best ___ in town." · "___ makes your day ___." · "Why wait? ___ today!"</p>
+
+    <div class="slogan-list">
+      <div class="slogan-row">
+        <input type="text" id="s3-a" maxlength="48" placeholder="Slogan 1" autocomplete="off">
+        <button type="button" class="btn btn-winner" data-slogan="a">Winner?</button>
+      </div>
+      <div class="slogan-row">
+        <input type="text" id="s3-b" maxlength="48" placeholder="Slogan 2" autocomplete="off">
+        <button type="button" class="btn btn-winner" data-slogan="b">Winner?</button>
+      </div>
+      <div class="slogan-row">
+        <input type="text" id="s3-c" maxlength="48" placeholder="Slogan 3" autocomplete="off">
+        <button type="button" class="btn btn-winner" data-slogan="c">Winner?</button>
+      </div>
+    </div>
+
+    <div class="choice-row guided-only" data-fills="focused">
+      <button type="button" class="chip">The best in town!</button>
+      <button type="button" class="chip">Made with a smile.</button>
+      <button type="button" class="chip">Try it today!</button>
+      <button type="button" class="chip">Need help? We're on it!</button>
+    </div>
+
+    <h3>Poster preview</h3>
+    <div class="poster" id="s3-poster">
+      <canvas id="poster-canvas" width="520" height="680" role="img" aria-label="Your poster preview"></canvas>
+    </div>
+
+    <div class="challenge">
+      <h4>⭐ Challenge</h4>
+      <p>Count the words in your winning slogan. Can you make it shorter and still as strong?</p>
+      <label class="field"><span class="field-label">Shorter slogan</span>
+        <input type="text" id="s3-challenge" maxlength="40" autocomplete="off"></label>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button type="button" class="btn btn-back" data-go="2">← Back</button>
+    <button type="button" class="btn btn-next" data-go="4">Next →</button>
+  </nav>
+</section>
+
+<!-- ============ STEP 4: CUSTOMERS ============ -->
+<section class="screen" id="screen-4" data-step="4" aria-label="Step 4: Customers" hidden>
+  <div class="card">
+    <div class="card-head">
+      <h2><span class="step-pill">Step 4</span> Customers 🧑‍🤝‍🧑</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">A customer is the person who buys from you. Fill in your customer card.</p>
+
+    <div class="customer-card">
+      <div class="cc-avatar" aria-hidden="true">🙂</div>
+      <div class="cc-fields">
+        <label class="field"><span class="field-label">Who are they?</span>
+          <input type="text" id="s4-who" placeholder="a kid in 4th grade" autocomplete="off"></label>
+        <div class="choice-row guided-only" data-fills="#s4-who">
+          <button type="button" class="chip">a kid in my class</button>
+          <button type="button" class="chip">a grown-up at school</button>
+          <button type="button" class="chip">a dog owner</button>
+        </div>
+
+        <label class="field"><span class="field-label">How old are they?</span>
+          <select id="s4-age">
+            <option value="">choose…</option>
+            <option>6 to 8 years old</option><option>9 to 11 years old</option>
+            <option>12 to 14 years old</option><option>grown-up</option>
+          </select></label>
+
+        <label class="field"><span class="field-label">What do they like?</span>
+          <input type="text" id="s4-likes" placeholder="games, snacks, animals" autocomplete="off"></label>
+        <div class="choice-row guided-only" data-fills="#s4-likes">
+          <button type="button" class="chip">games</button>
+          <button type="button" class="chip">snacks</button>
+          <button type="button" class="chip">animals</button>
+          <button type="button" class="chip">art</button>
+          <button type="button" class="chip">sports</button>
+        </div>
+
+        <label class="field"><span class="field-label">Where do they shop?</span>
+          <select id="s4-where">
+            <option value="">choose…</option>
+            <option>the school market day</option><option>a corner store</option>
+            <option>online</option><option>a weekend yard sale</option>
+          </select></label>
+
+        <label class="field"><span class="field-label">How do they hear about me?</span>
+          <select id="s4-hear">
+            <option value="">choose…</option>
+            <option>a poster at school</option><option>a friend tells them</option>
+            <option>an announcement</option><option>a flyer they take home</option>
+          </select></label>
+      </div>
+    </div>
+
+    <h3>Mini survey: would you buy it?</h3>
+    <p class="speak">Ask 5 classmates. Tap Yes or No for each one.</p>
+    <table class="survey" id="s4-survey">
+      <caption class="sr-only">Survey of five classmates</caption>
+      <thead><tr><th scope="col">Classmate</th><th scope="col">Would you buy it?</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="survey-total" aria-live="polite">
+      <div class="tally"><span class="tally-yes" id="s4-yes">0</span> said Yes ·
+        <span class="tally-no" id="s4-no">0</span> said No</div>
+      <div class="bar" role="img" aria-label="Bar showing how many said yes">
+        <div class="bar-fill" id="s4-bar" style="width:0%"></div>
+      </div>
+      <p class="survey-msg" id="s4-msg"></p>
+    </div>
+
+    <div class="challenge">
+      <h4>⭐ Challenge</h4>
+      <p>If only 2 out of 5 said yes, what is one change you could make?</p>
+      <label class="field"><span class="field-label">One change I would make</span>
+        <input type="text" id="s4-challenge" autocomplete="off"></label>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button type="button" class="btn btn-back" data-go="3">← Back</button>
+    <button type="button" class="btn btn-next" data-go="5">Next →</button>
+  </nav>
+</section>
+
+<!-- ============ STEP 5: BUDGET ============ -->
+<section class="screen" id="screen-5" data-step="5" aria-label="Step 5: Budget" hidden>
+  <div class="card">
+    <div class="card-head">
+      <h2><span class="step-pill">Step 5</span> Budget 💰</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">You start with twenty pretend dollars. Buy supplies, set a price, and see your profit.</p>
+
+    <div class="cash-bar">
+      <div class="cash-chip">Pretend cash: <strong>$20</strong></div>
+      <div class="cash-chip">Left to spend: <strong id="s5-left">$20</strong></div>
+    </div>
+
+    <button type="button" class="btn btn-mini guided-only" id="s5-easy">✨ Fill it in the easy way</button>
+
+    <h3>Class price list — pick your supplies</h3>
+    <table class="pricelist" id="s5-list">
+      <caption class="sr-only">Class price list</caption>
+      <thead><tr><th scope="col">Supply</th><th scope="col">Price</th><th scope="col">How many</th><th scope="col">Cost</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="warn" id="s5-warn" role="status"></p>
+
+    <h3>Set your price</h3>
+    <div class="money-inputs">
+      <label class="field"><span class="field-label">Price for one ($)</span>
+        <input type="number" id="s5-price" min="0" max="20" step="1" value="0" inputmode="numeric"></label>
+      <label class="field"><span class="field-label">How many will you sell?</span>
+        <input type="number" id="s5-sold" min="0" max="100" step="1" value="0" inputmode="numeric"></label>
+    </div>
+
+    <div class="math-board" aria-live="polite">
+      <div class="math-row"><span>Money In</span><span class="math-eq" id="s5-in-eq">$0 × 0</span><strong id="s5-in">$0</strong></div>
+      <div class="math-row"><span>Money Out</span><span class="math-eq" id="s5-out-eq">supplies</span><strong id="s5-out">$0</strong></div>
+      <div class="math-row math-profit"><span>Profit</span><span class="math-eq" id="s5-profit-eq">$0 − $0</span><strong id="s5-profit">$0</strong></div>
+      <p class="profit-msg" id="s5-profit-msg"></p>
+    </div>
+
+    <div class="challenge">
+      <h4>⭐ Challenge</h4>
+      <button type="button" class="btn btn-mini" id="s5-whatif">🤔 What if you sold half as many?</button>
+      <div class="whatif" id="s5-whatif-out" aria-live="polite"></div>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button type="button" class="btn btn-back" data-go="4">← Back</button>
+    <button type="button" class="btn btn-next" data-go="6">Pitch Day →</button>
+  </nav>
+</section>
+
+<!-- ============ PITCH DAY ============ -->
+<section class="screen" id="screen-6" aria-label="Pitch Day" hidden>
+  <div class="card">
+    <div class="card-head">
+      <h2>🎤 Pitch Day!</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">A pitch is a short talk about your business. Read your pitch out loud. You have one minute.</p>
+
+    <ol class="pitch-lines" id="pitch-lines"></ol>
+
+    <div class="getready">
+      <h3>Get ready checklist</h3>
+      <ul class="ready-list" id="ready-list">
+        <li><label><input type="checkbox" data-ready="0"> I can say my business name clearly</label></li>
+        <li><label><input type="checkbox" data-ready="1"> I know my slogan by heart</label></li>
+        <li><label><input type="checkbox" data-ready="2"> I can hold up my logo</label></li>
+        <li><label><input type="checkbox" data-ready="3"> I know my profit number</label></li>
+        <li><label><input type="checkbox" data-ready="4"> I practiced standing tall and smiling</label></li>
+      </ul>
+    </div>
+
+    <div class="timer-box">
+      <h3>One minute timer</h3>
+      <div class="timer-face" id="timer-face" aria-live="off">1:00</div>
+      <div class="timer-btns">
+        <button type="button" class="btn" id="timer-start">▶ Start</button>
+        <button type="button" class="btn btn-quiet" id="timer-reset">↺ Reset</button>
+      </div>
+      <p class="timer-msg" id="timer-msg" role="status"></p>
+    </div>
+  </div>
+  <nav class="step-nav">
+    <button type="button" class="btn btn-back" data-go="5">← Back</button>
+    <button type="button" class="btn btn-next" data-go="7">My certificate →</button>
+  </nav>
+</section>
+
+<!-- ============ CERTIFICATE ============ -->
+<section class="screen" id="screen-7" aria-label="Business card and certificate" hidden>
+  <div class="card no-print-card">
+    <div class="card-head">
+      <h2>🏅 Business Card &amp; Certificate</h2>
+      <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
+    </div>
+    <p class="speak">This page fits on one sheet of paper. Press Print to take it home.</p>
+    <button type="button" class="btn" id="print-btn">🖨 Print this page</button>
+  </div>
+
+  <div class="cert-sheet" id="cert-sheet">
+    <div class="cert-border">
+      <p class="cert-eyebrow">Be the Boss! · Young Entrepreneur</p>
+      <h2 class="cert-title">Certificate of Business</h2>
+      <p class="cert-line">This certifies that</p>
+      <p class="cert-name" id="cert-nick">—</p>
+      <p class="cert-line">is the proud boss of</p>
+
+      <div class="cert-main">
+        <canvas id="cert-canvas" width="300" height="300" aria-label="Your logo"></canvas>
+        <div class="cert-facts">
+          <p class="cert-biz" id="cert-biz">—</p>
+          <p class="cert-slogan" id="cert-slogan">—</p>
+          <dl>
+            <dt>We sell</dt><dd id="cert-sells">—</dd>
+            <dt>Our customer</dt><dd id="cert-cust">—</dd>
+            <dt>Money In</dt><dd id="cert-in">—</dd>
+            <dt>Money Out</dt><dd id="cert-out">—</dd>
+            <dt>Profit</dt><dd id="cert-profit">—</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="cert-sign">
+        <div><span class="sign-line"></span><span class="sign-label">Boss signature</span></div>
+        <div><span class="sign-line"></span><span class="sign-label">Teacher signature</span></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="step-nav">
+    <button type="button" class="btn btn-back" data-go="6">← Back</button>
+    <span></span>
+  </nav>
+</section>
+
+</main>
+
+<!-- star burst + confetti layers -->
+<div id="burst-layer" class="fx-layer" aria-hidden="true"></div>
+<canvas id="confetti-canvas" class="fx-layer" aria-hidden="true"></canvas>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="js/state.js"></script>
+<script src="js/logo.js"></script>
+<script src="js/steps.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
