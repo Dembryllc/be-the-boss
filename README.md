@@ -8,13 +8,21 @@ Plain HTML, CSS, and JavaScript. No frameworks, no build step, no server code.
 ## Open it locally
 
 ```bash
+open ~/Desktop/be-the-boss/index.html
+```
+
+That is all it needs — it opens in your browser and everything works,
+including saving progress and downloading the logo.
+
+If you would rather see it the way a Chromebook will (served over http),
+run this instead and go to **http://localhost:8080**:
+
+```bash
 cd ~/Desktop/be-the-boss && python3 -m http.server 8080
 ```
 
-Then go to **http://localhost:8080** in Chrome.
-
-(It also works by double-clicking `index.html`, but a local server is closer to
-how it will run on a Chromebook.)
+To put it on Chromebooks, copy this whole folder to Google Drive or any web
+host. There is nothing to install and nothing to build.
 
 ## Privacy
 
