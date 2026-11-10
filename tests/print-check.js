@@ -45,6 +45,18 @@ const URL = process.env.APP_URL || 'http://localhost:8080/index.html';
     && hidden.cert !== 'none' ? '  ok   print hides the app chrome, keeps the certificate'
     : '  FAIL print layout: ' + JSON.stringify(hidden));
 
+  // the teacher guide is advertised as three pages, so hold it to that
+  const guide = await browser.newPage();
+  await guide.goto(URL.replace(/index\.html$/, 'teacher-guide.html'));
+  await guide.waitForTimeout(400);
+  const guideOut = 'tests/screens/teacher-guide.pdf';
+  await guide.pdf({ path: guideOut, format: 'Letter', printBackground: true });
+  const guidePages = (fs.readFileSync(guideOut).toString('latin1')
+    .match(/\/Type\s*\/Page[^s]/g) || []).length;
+  console.log(guidePages === 3
+    ? '  ok   teacher guide prints on 3 pages'
+    : '  FAIL teacher guide pages: ' + guidePages + ' (the README says three)');
+
   await browser.close();
-  process.exit(pages === 1 ? 0 : 1);
+  process.exit(pages === 1 && guidePages === 3 ? 0 : 1);
 })();
