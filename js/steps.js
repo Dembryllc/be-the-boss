@@ -593,11 +593,12 @@
 
   window.Steps = {
     init: function () {
+      // set this first: a saved profit should not re-fire the confetti on load
+      wasProfitable = S.profit() > 0;
       wireChips();
       initWelcome();
       initStep1(); initStep2(); initStep3(); initStep4(); initStep5();
       initPitch(); initCert();
-      wasProfitable = S.profit() > 0;
     },
     refresh: refresh,
     repaintArt: function () { paint2(); paint3(); paintCert(); }

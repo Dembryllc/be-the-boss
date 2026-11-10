@@ -97,7 +97,7 @@ p{margin:0 0 .8em}
 
 /* ---------- trail map ---------- */
 .trail-wrap{padding:6px 12px 0;overflow-x:auto}
-.trail{display:block;width:100%;min-width:640px;height:150px}
+.trail{display:block;width:100%;min-width:640px;height:172px}
 .stop-dot{fill:#fff;stroke:var(--line);stroke-width:5}
 .stop-num{font-size:20px;font-weight:800;fill:var(--ink-soft);font-family:inherit}
 .stop-name{font-size:15px;font-weight:700;fill:var(--ink-soft);font-family:inherit}
@@ -263,7 +263,9 @@ body.level-guided button.guided-only,body.level-guided .btn.guided-only{display:
 .survey,.pricelist{width:100%;border-collapse:collapse;margin:10px 0;font-size:1rem}
 .survey th,.survey td,.pricelist th,.pricelist td{
   text-align:left;padding:10px 12px;border-bottom:3px solid var(--line)}
-.survey th,.pricelist th{font-size:.9rem;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-soft)}
+.survey thead th,.pricelist thead th{font-size:.9rem;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--ink-soft)}
+.survey tbody th,.pricelist tbody th{font-weight:700}
 .yn{display:flex;gap:8px}
 .yn button{min-height:var(--tap);min-width:62px;font:inherit;font-weight:700;cursor:pointer;
   border:3px solid var(--line);border-radius:12px;background:#fff;color:var(--ink-soft)}

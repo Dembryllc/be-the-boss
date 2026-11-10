@@ -47,7 +47,18 @@
     load: function () {
       try {
         var raw = localStorage.getItem(KEY);
-        if (raw) merge(data, JSON.parse(raw));
+        if (raw) {
+          var saved = JSON.parse(raw);
+          merge(data, saved);
+          // The supply list is a free-form map, so merge() cannot walk it.
+          // Copy it over by hand and check every value before trusting it.
+          data.s5.qty = {};
+          var savedQty = (saved && saved.s5 && saved.s5.qty) || {};
+          Object.keys(savedQty).forEach(function (id) {
+            var n = Math.floor(Number(savedQty[id]) || 0);
+            if (n > 0 && n <= 5 && Store.priceItem(id)) data.s5.qty[id] = n;
+          });
+        }
       } catch (e) { /* private mode or bad JSON: carry on with a blank slate */ }
       return data;
     },
