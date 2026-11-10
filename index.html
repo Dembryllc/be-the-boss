@@ -37,8 +37,10 @@
       <button type="button" class="level-btn" data-level="stretch" aria-pressed="false">Stretch</button>
     </div>
     <div class="work-tools">
-      <button type="button" id="save-work" class="btn btn-quiet">💾 Save<span class="long"> my work</span></button>
+      <button type="button" id="save-work" class="btn btn-quiet needs-download">💾 Save<span class="long"> my work</span></button>
+      <button type="button" id="copy-work" class="btn btn-quiet embedded-only">📋 Copy<span class="long"> my work</span></button>
       <button type="button" id="open-work" class="btn btn-quiet">📂 Open<span class="long"> my work</span></button>
+      <button type="button" id="paste-work" class="btn btn-quiet embedded-only">📥 Paste<span class="long"> my work</span></button>
       <button type="button" id="start-over" class="btn btn-quiet">↺ Start over</button>
     </div>
     <span id="saved-flag" class="saved-flag" role="status">Saved</span>
@@ -113,9 +115,13 @@
       <input type="text" id="nickname" maxlength="18" placeholder="Example: Captain Lemon" autocomplete="off">
     </label>
 
-    <p class="speak save-note">Your work saves by itself as you go. To move it to
-      another Chromebook, or to hand it in, tap <strong>Save</strong> at the top.
-      Tap <strong>Open</strong> to bring it back.</p>
+    <p class="speak save-note needs-download">Your work saves by itself as you go.
+      To move it to another Chromebook, or to hand it in, tap <strong>Save</strong>
+      at the top. Tap <strong>Open</strong> to bring it back.</p>
+    <p class="speak save-note embedded-only">Your work saves by itself as you go, on
+      this computer. To hand it in, tap <strong>Copy my work</strong> at the top and
+      paste it where your teacher asks. Tap <strong>Paste my work</strong> to bring
+      it back.</p>
 
     <div class="choice-row guided-only" data-fills="#nickname">
       <button type="button" class="chip">Captain Lemon</button>
@@ -315,7 +321,9 @@
       <div class="logo-stage">
         <canvas id="logo-canvas" width="440" height="440" role="img"
                 aria-label="Your logo preview"></canvas>
-        <button type="button" class="btn btn-mini" id="s2-download">⬇ Download logo (PNG)</button>
+        <button type="button" class="btn btn-mini needs-download" id="s2-download">⬇ Download logo (PNG)</button>
+        <p class="save-hint embedded-only">To keep your logo: press and hold the
+          picture (or right-click it) and choose <strong>Save image</strong>.</p>
       </div>
     </div>
 
@@ -404,7 +412,9 @@
       <canvas id="poster-canvas" width="520" height="680" role="img" aria-label="Your poster preview"></canvas>
     </div>
     <div class="poster-tools">
-      <button type="button" class="btn btn-mini" id="s3-download">⬇ Download poster (PNG)</button>
+      <button type="button" class="btn btn-mini needs-download" id="s3-download">⬇ Download poster (PNG)</button>
+      <p class="save-hint embedded-only">To keep your poster: press and hold it
+        (or right-click it) and choose <strong>Save image</strong>.</p>
     </div>
 
     <div class="challenge">
@@ -599,9 +609,12 @@
       <h2>🏅 Business Card &amp; Certificate</h2>
       <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
     </div>
-    <p class="speak">This page fits on one sheet of paper. Press the button to print it,
-      or choose <strong>Save as PDF</strong> in the print window to keep it as a file.</p>
-    <button type="button" class="btn" id="print-btn">🖨 Print or save as PDF</button>
+    <p class="speak needs-download">This page fits on one sheet of paper. Press the
+      button to print it, or choose <strong>Save as PDF</strong> in the print window
+      to keep it as a file.</p>
+    <button type="button" class="btn needs-download" id="print-btn">🖨 Print or save as PDF</button>
+    <p class="speak embedded-only">Here is your certificate. Show your teacher, or
+      press and hold it to save a picture of it.</p>
   </div>
 
   <div class="cert-sheet" id="cert-sheet">
@@ -641,6 +654,19 @@
 </section>
 
 </main>
+
+<!-- Asking a question on the page itself: the browser's own pop-up boxes
+     do not appear everywhere this runs. -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-text">
+    <p class="modal-text" id="modal-text"></p>
+    <div class="modal-extra" id="modal-extra"></div>
+    <div class="modal-btns">
+      <button type="button" class="btn btn-quiet" id="modal-no">No, go back</button>
+      <button type="button" class="btn" id="modal-yes">Yes</button>
+    </div>
+  </div>
+</div>
 
 <!-- star burst + confetti layers -->
 <div id="burst-layer" class="fx-layer" aria-hidden="true"></div>

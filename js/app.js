@@ -238,6 +238,84 @@
     window.addEventListener('pagehide', function () { if (synth) synth.cancel(); });
   }
 
+  /* ---------- are we inside another web page? ----------
+     Loaded from a folder, the app can hand over files and open the print
+     window. Inside a web page (an embedded viewer) the browser blocks both,
+     so the app shows different buttons instead of ones that do nothing. */
+  var embedded = (function () {
+    try { return window.self !== window.top; } catch (e) { return true; }
+  })();
+
+  /* ---------- asking a question on the page itself ----------
+     The browser's own pop-up boxes do not appear in every setting, so the
+     app brings its own. onYes runs when the student says yes. */
+  function ask(message, yesLabel, onYes, extraHtml) {
+    var box = $('#modal');
+    if (!box) { if (onYes) onYes(); return; }      // safety net
+    $('#modal-text').textContent = message;
+    $('#modal-extra').innerHTML = extraHtml || '';
+    $('#modal-yes').textContent = yesLabel || 'Yes';
+    box.hidden = false;
+    var ta = $('#modal-extra textarea');
+    (ta || $('#modal-yes')).focus();
+
+    function close() {
+      box.hidden = true;
+      $('#modal-extra').innerHTML = '';
+      document.removeEventListener('keydown', onKey);
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    document.addEventListener('keydown', onKey);
+
+    $('#modal-yes').onclick = function () {
+      var value = ta ? ta.value : '';
+      close();
+      if (onYes) onYes(value);
+    };
+    $('#modal-no').onclick = close;
+    box.onclick = function (e) { if (e.target === box) close(); };
+  }
+
+  /* ---------- handing work in where downloads are blocked ----------
+     Copy puts the work on the clipboard so it can be pasted into whatever
+     the teacher asks for. Paste brings it back. */
+  function wireCopyPaste() {
+    var copyBtn = $('#copy-work');
+    var pasteBtn = $('#paste-work');
+    if (!copyBtn || !pasteBtn) return;
+
+    copyBtn.addEventListener('click', function () {
+      if (!S.hasWork()) { toast('Fill in a little first, then copy.'); return; }
+      var text = S.toFile();
+      var done = function () {
+        toast('Copied! Now paste it where your teacher asks.', true);
+      };
+      // must be called straight from the click for the browser to allow it
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { showBox(text); });
+      } else {
+        showBox(text);
+      }
+      function showBox(t) {
+        ask('Copy all of this, then paste it where your teacher asks.',
+          'Done', null,
+          '<textarea readonly></textarea>');
+        var ta = $('#modal-extra textarea');
+        if (ta) { ta.value = t; ta.select(); }
+      }
+    });
+
+    pasteBtn.addEventListener('click', function () {
+      ask('Paste your work in the box, then press Open it.', 'Open it',
+        function (text) {
+          if (!String(text || '').trim()) { toast('The box was empty.'); return; }
+          if (S.fromFile(String(text))) location.reload();
+          else toast('That is not Be the Boss work. Copy the whole thing and try again.');
+        },
+        '<textarea placeholder="Paste here"></textarea>');
+    });
+  }
+
   /* ---------- saving work to a file ----------
      This is how a student moves work to another Chromebook, keeps it when a
      device is shared, or hands it in. Still no accounts and no server: the
@@ -258,10 +336,13 @@
     });
 
     $('#open-work').addEventListener('click', function () {
-      if (S.hasWork() && !window.confirm(
-        'Opening a file replaces the business on this computer. Keep going?')) return;
-      fileInput.value = '';        // so picking the same file twice still works
-      fileInput.click();
+      function pick() {
+        fileInput.value = '';      // so picking the same file twice still works
+        fileInput.click();
+      }
+      if (!S.hasWork()) { pick(); return; }
+      ask('Opening a file replaces the business on this computer. Keep going?',
+        'Yes, open it', pick);
     });
 
     fileInput.addEventListener('change', function () {
@@ -290,11 +371,12 @@
   /* ---------- start over ---------- */
   function wireStartOver() {
     $('#start-over').addEventListener('click', function () {
-      var ok = window.confirm('Start over? This erases your business and cannot be undone.');
-      if (!ok) return;
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-      S.reset();
-      location.reload();
+      ask('Start over? This erases your business and cannot be undone.',
+        'Yes, start over', function () {
+          if (window.speechSynthesis) window.speechSynthesis.cancel();
+          S.reset();
+          location.reload();
+        });
     });
   }
 
@@ -368,7 +450,10 @@
     wireReadAloud();
     wireStartOver();
     wireWorkFiles();
-    wireOptionalArt();
+    wireCopyPaste();
+    if (embedded) document.body.classList.add('is-embedded');
+    // the optional picture files only exist in the folder version
+    if (!embedded) wireOptionalArt();
 
     // keep the done flags honest after a reload
     for (var i = 1; i <= 5; i++) S.data.done[i] = S.isDone(i);
@@ -388,7 +473,8 @@
     });
   }
 
-  window.App = { go: go, toast: toast, confetti: confetti, afterChange: afterChange };
+  window.App = { go: go, toast: toast, confetti: confetti, afterChange: afterChange,
+    ask: ask, embedded: embedded };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

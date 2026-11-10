@@ -419,3 +419,29 @@ body.level-guided button.guided-only,body.level-guided .btn.guided-only{display:
   .customer-card{flex-direction:column}
   .cert-main{text-align:center}
 }
+
+
+/* ---- asking a question on the page itself ----
+   Some places this runs do not show the browser's own pop-up boxes,
+   so the app brings its own. */
+.modal{position:fixed; inset:0; z-index:60; display:flex; align-items:center;
+  justify-content:center; padding:20px; background:rgba(43,35,66,.55)}
+.modal[hidden]{display:none}
+.modal-card{background:#fff; border:3px solid var(--ink); border-radius:22px;
+  box-shadow:0 14px 0 rgba(43,35,66,.18); padding:22px; max-width:520px; width:100%}
+.modal-text{font-size:21px; font-weight:700; margin:0 0 14px}
+.modal-extra:empty{display:none}
+.modal-extra{margin:0 0 14px}
+.modal-extra textarea{width:100%; min-height:130px; font:inherit; font-size:15px;
+  border:3px solid var(--ink); border-radius:14px; padding:10px; resize:vertical}
+.modal-btns{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+.modal-btns .btn{min-height:var(--tap)}
+
+/* ---- two settings: a folder on this computer, or inside a web page ----
+   Inside a web page the sandbox blocks downloads and printing, so those
+   buttons are swapped for ones that do work. */
+.embedded-only{display:none}
+body.is-embedded .needs-download{display:none !important}
+body.is-embedded .embedded-only{display:block}
+body.is-embedded button.embedded-only{display:inline-block}
+.save-hint{font-size:16px; margin:8px 0 0; opacity:.85; max-width:44ch}

@@ -22,6 +22,10 @@ cd ~/Desktop/be-the-boss && node tests/offline-check.js
 cd ~/Desktop/be-the-boss && node tests/review-check.js
 ```
 
+```bash
+cd ~/Desktop/be-the-boss && node tests/embed-check.js
+```
+
 ## What `clickthrough.js` covers
 
 - All 5 steps at all 3 levels (Guided, On Track, Stretch), end to end.
@@ -47,6 +51,13 @@ page, and checks the table, the summary counts, sorting, the per-student detail,
 the CSV, that a file which is not ours is refused, that re-opening a file does
 not duplicate the student, and that **no student data is written to the
 browser**.
+
+`embed-check.js` builds `dist/be-the-boss.html`, loads it inside another web
+page the way a hosted copy runs, and checks that the file carries no document
+tags of its own, that the font travels inside it, that nothing is loaded from
+another website, that the buttons the browser would block are gone and Copy and
+Paste are there instead, that Start over asks on the page rather than through a
+pop-up box the browser never shows, and that pasted work comes back whole.
 
 `offline-check.js` opens the app both ways it gets used — served over http and
 double-clicked as a file — and checks that the shipped font really loads and

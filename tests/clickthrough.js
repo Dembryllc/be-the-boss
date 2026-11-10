@@ -240,8 +240,8 @@ async function runLevel(browser, level) {
   check('level survives a reload', (await page.getAttribute('body', 'class')) === 'level-' + level);
 
   // ---- start over clears it ----
-  page.once('dialog', (d) => d.accept());
   await page.click('#start-over');
+  await page.click('#modal-yes');          // the app asks on the page itself now
   await page.waitForSelector('#screen-0.is-active');
   check('start over empties the nickname', (await page.inputValue('#nickname')) === '');
   check('start over clears the trail', (await page.locator('.trail-stop.is-done').count()) === 0);
@@ -315,8 +315,8 @@ async function workFiles(browser) {
     !/lastName|email|@/.test(text));
 
   // wipe this computer, the way a shared Chromebook would
-  page.once('dialog', (d) => d.accept());
   await page.click('#start-over');
+  await page.click('#modal-yes');          // the app asks on the page itself now
   await page.waitForSelector('#screen-0.is-active');
   check('the computer is empty again', (await page.inputValue('#nickname')) === '');
 

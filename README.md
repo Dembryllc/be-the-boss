@@ -24,6 +24,37 @@ cd ~/Desktop/be-the-boss && python3 -m http.server 8080
 To put it on Chromebooks, copy this whole folder to Google Drive or any web
 host. There is nothing to install and nothing to build.
 
+## Two ways to give it to the class
+
+**From the folder.** Open `index.html` in a browser. Everything works:
+Save and Open a file, the logo and poster downloads, and printing the
+certificate.
+
+**As one web page.** Some school networks block files opened from a
+Chromebook's own folder. For those, run:
+
+```bash
+node tools/build-artifact.js
+```
+
+That writes `dist/be-the-boss.html` — the whole app, the font included, as a
+single file with nothing loaded from the internet. Upload or paste that one
+file wherever the class can reach it.
+
+A page hosted that way sits inside someone else's web page, and browsers
+block three things there: saving a file, downloading a picture, and opening
+the print window. The app notices and changes what it offers:
+
+| In the folder | Hosted as one page |
+| --- | --- |
+| **Save my work** → a file | **Copy my work** → the clipboard, to paste where the teacher asks |
+| **Open my work** → a file | **Open my work** → a file, *or* **Paste my work** |
+| **Download logo / poster** | "Press and hold the picture to save it" |
+| **Print the certificate** | The certificate on screen, to show or screenshot |
+
+Nothing else changes. Work still saves by itself on that computer, and
+still nothing is sent anywhere.
+
 ## For the teacher
 
 Two pages, both just opened in a browser:
@@ -135,7 +166,8 @@ js/steps.js         the five steps, Pitch Day, certificate
 js/app.js           navigation, trail map, read aloud, celebrations
 fonts/              Lexend, plus its licence (OFL.txt)
 assets/README.md    how to drop in your own images later
-tests/              Playwright click-through, print, offline and review checks
+tools/              builds the one-file version for hosting
+tests/              Playwright click-through, print, offline, review and one-file checks
 ```
 
 ## Credits
