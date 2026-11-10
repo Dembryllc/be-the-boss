@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Be the Boss! — Review Student Work</title>
+<meta name="description" content="Open a pile of saved Be the Boss! files and see the whole class as one table.">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E%F0%9F%93%8A%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#2B2342; --soft:#5A5070; --line:#E8D7BC; --cream:#FFF8EC;
+    --sun:#FFC94A; --sun-deep:#F2A93B; --tomato:#FF6B5B; --mint:#35C9A3;
+    --blue:#4B7BEC; --grape:#9B6BE8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:0 0 60px;
+    font-family:'Lexend','Trebuchet MS',system-ui,sans-serif;
+    font-size:16px; line-height:1.5; color:var(--ink); background:var(--cream);
+  }
+  .wrap{max-width:1240px; margin:0 auto; padding:0 18px}
+  header{background:#fff; border-bottom:4px solid var(--line); padding:14px 0; margin-bottom:18px}
+  header .wrap{display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between}
+  h1{font-size:1.4rem; margin:0}
+  h1 small{display:block; font-size:.8rem; font-weight:400; color:var(--soft)}
+  .tools{display:flex; flex-wrap:wrap; gap:8px}
+
+  .btn{
+    min-height:48px; padding:11px 18px; border:0; border-radius:14px; cursor:pointer;
+    font:inherit; font-size:.95rem; font-weight:700; color:#fff; background:var(--blue);
+    box-shadow:0 4px 0 #2f5bc4;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:active{transform:translateY(2px); box-shadow:0 2px 0 #2f5bc4}
+  .btn-quiet{background:#fff; color:var(--ink); box-shadow:0 4px 0 var(--line)}
+  .btn-small{min-height:40px; padding:8px 12px; font-size:.85rem}
+
+  .drop{
+    border:4px dashed var(--line); border-radius:20px; background:#fff;
+    padding:34px 22px; text-align:center; margin-bottom:18px;
+  }
+  .drop.is-over{border-color:var(--mint); background:#F4FBF8}
+  .drop h2{margin:.2em 0 .3em; font-size:1.2rem}
+  .drop p{margin:0 0 .8em; color:var(--soft)}
+  .privacy{font-size:.9rem; color:var(--soft); margin-top:10px}
+
+  .summary{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px}
+  .stat{background:#fff; border:3px solid var(--line); border-radius:16px; padding:10px 16px; min-width:130px}
+  .stat b{display:block; font-size:1.5rem; line-height:1.2}
+  .stat span{font-size:.82rem; color:var(--soft)}
+
+  .notice{border-radius:14px; padding:10px 16px; margin-bottom:14px; font-size:.95rem}
+  .notice-bad{background:#FFF4F2; border:3px solid var(--tomato)}
+  .notice:empty{display:none}
+
+  table{width:100%; border-collapse:collapse; background:#fff;
+        border:3px solid var(--line); border-radius:16px}
+  /* no overflow:hidden here — it clipped the caption */
+  thead th:first-child{border-top-left-radius:13px}
+  thead th:last-child{border-top-right-radius:13px}
+  caption{text-align:left; font-size:.85rem; color:var(--soft); padding:0 0 6px 2px}
+  th,td{text-align:left; padding:10px 12px; border-bottom:2px solid var(--line); vertical-align:top}
+  thead th{background:#FFFDF8; font-size:.78rem; text-transform:uppercase;
+           letter-spacing:.5px; color:var(--soft); white-space:nowrap}
+  thead th button{
+    all:unset; cursor:pointer; font:inherit; font-size:inherit; letter-spacing:inherit;
+    text-transform:inherit; color:inherit; display:inline-flex; gap:5px; align-items:center;
+    min-height:40px;
+  }
+  thead th button:hover{color:var(--ink)}
+  thead th[aria-sort] button{color:var(--ink); font-weight:700}
+  tbody tr:hover{background:#FFFDF8}
+  th:last-child,td:last-child{padding-right:16px}
+  td.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  .profit-good{color:#1d8f73; font-weight:700}
+  .profit-bad{color:#cf4a3c; font-weight:700}
+  .biz{font-weight:700}
+  .quiet{color:var(--soft)}
+  .steps{display:flex; gap:3px}
+  .steps i{
+    width:20px; height:20px; border-radius:50%; display:grid; place-items:center;
+    font-size:.65rem; font-style:normal; font-weight:700;
+    background:#F0E6D4; color:var(--soft);
+  }
+  .steps i.on{background:var(--mint); color:#fff}
+
+  .detail{background:#FFFDF8}
+  .detail td{padding:16px 18px}
+  .detail-grid{display:grid; gap:16px; grid-template-columns:200px 1fr}
+  @media (max-width:760px){.detail-grid{grid-template-columns:1fr}}
+  .detail canvas{width:180px; height:180px; border:3px solid var(--line); border-radius:14px; background:#fff}
+  .detail dl{display:grid; grid-template-columns:auto 1fr; gap:4px 14px; margin:0 0 12px; font-size:.95rem}
+  .detail dt{font-weight:700; color:var(--soft)}
+  .detail dd{margin:0; overflow-wrap:anywhere}
+  .detail h3{font-size:.95rem; margin:0 0 .3em}
+  .slogans{list-style:none; margin:0 0 12px; padding:0; font-size:.95rem}
+  .slogans li{padding:3px 0}
+  .slogans li.win{font-weight:700}
+  .empty{text-align:center; color:var(--soft); padding:30px 0}
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+  :focus-visible{outline:4px solid var(--blue); outline-offset:3px; border-radius:8px}
+
+  @media print{
+    @page{size:letter landscape; margin:10mm}
+    body{background:#fff; font-size:9pt}
+    header{border:0; margin-bottom:6mm; padding:0}
+    .tools,.drop,.no-print{display:none !important}
+    .wrap{max-width:none; padding:0}
+    table{border-width:1pt}
+    thead{display:table-header-group}
+    tr{break-inside:avoid}
+    .stat{border-width:1pt; padding:4pt 8pt}
+    .stat b{font-size:12pt}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Be the Boss! — Review student work
+      <small>Open the files your students saved. Nothing is uploaded.</small></h1>
+    <div class="tools no-print">
+      <button type="button" class="btn" id="pick">📂 Open student files</button>
+      <button type="button" class="btn btn-quiet" id="csv" hidden>⬇ Download as CSV</button>
+      <button type="button" class="btn btn-quiet" id="print" hidden>🖨 Print</button>
+      <button type="button" class="btn btn-quiet" id="clear" hidden>✕ Clear</button>
+    </div>
+    <input type="file" id="files" accept=".json,application/json" multiple hidden>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="drop no-print" id="drop">
+    <h2>Drop the saved files here</h2>
+    <p>Or press <strong>Open student files</strong> and select them all at once.<br>
+      Look for files ending in <strong>-be-the-boss.json</strong>.</p>
+    <p class="privacy">🔒 Everything happens inside this page. No file is uploaded,
+      and nothing is kept when you close the tab.</p>
+  </div>
+
+  <div class="notice notice-bad" id="problems" role="status"></div>
+
+  <div class="summary" id="summary" hidden></div>
+
+  <table id="table" hidden>
+    <caption id="caption"></caption>
+    <thead>
+      <tr>
+        <th scope="col"><button type="button" data-sort="nick">Student</button></th>
+        <th scope="col"><button type="button" data-sort="biz">Business</button></th>
+        <th scope="col"><button type="button" data-sort="steps">Steps</button></th>
+        <th scope="col"><button type="button" data-sort="sells">Sells</button></th>
+        <th scope="col"><button type="button" data-sort="customer">Customer</button></th>
+        <th scope="col"><button type="button" data-sort="slogan">Slogan</button></th>
+        <th scope="col" class="num"><button type="button" data-sort="in">In</button></th>
+        <th scope="col" class="num"><button type="button" data-sort="out">Out</button></th>
+        <th scope="col" class="num"><button type="button" data-sort="profit">Profit</button></th>
+        <th scope="col" class="no-print"><span class="sr-only">Details</span></th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <p class="empty" id="empty">No files open yet.</p>
+</div>
+
+<script src="js/prices.js"></script>
+<script src="js/state.js"></script>
+<script src="js/logo.js"></script>
+<script>
+/* ===== teacher-review.html =====
+   Reads the files students saved and shows the class as one table.
+   Everything stays in this page: no upload, and nothing written to the
+   browser's storage, so closing the tab leaves no student data behind. */
+(function () {
+  'use strict';
+
+  var $ = function (s) { return document.querySelector(s); };
+  var students = [];                 // in memory only, on purpose
+  var sortKey = 'nick', sortDir = 1;
+
+  /* ---- turn one saved file into one row ---- */
+  function toRow(biz, filename) {
+    var steps = [1, 2, 3, 4, 5].map(function (n) { return Store.isDoneOf(biz, n); });
+    return {
+      file: filename,
+      biz: biz,
+      nick: biz.nickname || '(no nickname)',
+      bizName: Store.bizNameOf(biz) || '(no name yet)',
+      steps: steps,
+      stepCount: steps.filter(Boolean).length,
+      sells: biz.s1.sells || '',
+      customer: biz.s4.who || '',
+      slogan: Store.winningSloganOf(biz),
+      moneyIn: Store.moneyInOf(biz),
+      moneyOut: Store.moneyOutOf(biz),
+      profit: Store.profitOf(biz)
+    };
+  }
+
+  function sortValue(row) {
+    switch (sortKey) {
+      case 'biz': return row.bizName.toLowerCase();
+      case 'steps': return row.stepCount;
+      case 'sells': return row.sells.toLowerCase();
+      case 'customer': return row.customer.toLowerCase();
+      case 'slogan': return row.slogan.toLowerCase();
+      case 'in': return row.moneyIn;
+      case 'out': return row.moneyOut;
+      case 'profit': return row.profit;
+      default: return row.nick.toLowerCase();
+    }
+  }
+
+  function money(n) { return n < 0 ? '−$' + Math.abs(n) : '$' + n; }
+
+  function esc(t) {
+    return String(t == null ? '' : t)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  /* ---- draw ---- */
+  function render() {
+    var rows = students.slice().sort(function (a, b) {
+      var x = sortValue(a), y = sortValue(b);
+      if (x < y) return -1 * sortDir;
+      if (x > y) return 1 * sortDir;
+      return 0;
+    });
+
+    var body = $('#rows');
+    body.innerHTML = '';
+
+    rows.forEach(function (r, i) {
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<th scope="row">' + esc(r.nick) + '</th>' +
+        '<td class="biz">' + esc(r.bizName) + '</td>' +
+        '<td><div class="steps" role="img" aria-label="' + r.stepCount + ' of 5 steps finished">' +
+          r.steps.map(function (on, n) {
+            return '<i class="' + (on ? 'on' : '') + '">' + (n + 1) + '</i>';
+          }).join('') + '</div></td>' +
+        '<td>' + (r.sells ? esc(r.sells) : '<span class="quiet">—</span>') + '</td>' +
+        '<td>' + (r.customer ? esc(r.customer) : '<span class="quiet">—</span>') + '</td>' +
+        '<td>' + (r.slogan ? esc(r.slogan) : '<span class="quiet">—</span>') + '</td>' +
+        '<td class="num">' + money(r.moneyIn) + '</td>' +
+        '<td class="num">' + money(r.moneyOut) + '</td>' +
+        '<td class="num ' + (r.profit > 0 ? 'profit-good' : (r.profit < 0 ? 'profit-bad' : '')) + '">' +
+          money(r.profit) + '</td>' +
+        '<td class="no-print"><button type="button" class="btn btn-quiet btn-small" ' +
+          'aria-expanded="false">Details</button></td>';
+
+      var detail = document.createElement('tr');
+      detail.className = 'detail';
+      detail.hidden = true;
+      detail.innerHTML = '<td colspan="10"></td>';
+
+      tr.querySelector('button').addEventListener('click', function (e) {
+        var open = detail.hidden;
+        detail.hidden = !open;
+        e.target.setAttribute('aria-expanded', String(open));
+        e.target.textContent = open ? 'Hide' : 'Details';
+        if (open) fillDetail(detail.querySelector('td'), r, i);
+      });
+
+      body.appendChild(tr);
+      body.appendChild(detail);
+    });
+
+    // sort arrows
+    document.querySelectorAll('thead th').forEach(function (th) {
+      var b = th.querySelector('button');
+      if (!b) return;
+      if (b.dataset.sort === sortKey) {
+        th.setAttribute('aria-sort', sortDir === 1 ? 'ascending' : 'descending');
+        b.textContent = b.textContent.replace(/ [↑↓]$/, '') + (sortDir === 1 ? ' ↑' : ' ↓');
+      } else {
+        th.removeAttribute('aria-sort');
+        b.textContent = b.textContent.replace(/ [↑↓]$/, '');
+      }
+    });
+
+    var any = students.length > 0;
+    $('#table').hidden = !any;
+    $('#summary').hidden = !any;
+    $('#empty').hidden = any;
+    $('#csv').hidden = !any;
+    $('#print').hidden = !any;
+    $('#clear').hidden = !any;
+    $('#caption').textContent = any
+      ? students.length + ' file' + (students.length === 1 ? '' : 's') + ' open. Tap a column heading to sort.'
+      : '';
+
+    renderSummary();
+  }
+
+  function renderSummary() {
+    var n = students.length;
+    if (!n) { $('#summary').innerHTML = ''; return; }
+    var finished = students.filter(function (r) { return r.stepCount === 5; }).length;
+    var profitable = students.filter(function (r) { return r.profit > 0; }).length;
+    var withBudget = students.filter(function (r) { return r.moneyIn > 0 || r.moneyOut > 0; });
+    var avg = withBudget.length
+      ? Math.round(withBudget.reduce(function (t, r) { return t + r.profit; }, 0) / withBudget.length)
+      : 0;
+
+    $('#summary').innerHTML =
+      stat(n, 'students open') +
+      stat(finished + ' of ' + n, 'finished all 5 steps') +
+      stat(profitable + ' of ' + n, 'made a profit') +
+      stat(money(avg), 'average profit');
+  }
+  function stat(big, label) {
+    return '<div class="stat"><b>' + esc(big) + '</b><span>' + esc(label) + '</span></div>';
+  }
+
+  /* ---- the expanded view for one student ---- */
+  function fillDetail(cell, r, i) {
+    var b = r.biz;
+    var picked = Object.keys(b.s5.qty).map(function (id) {
+      var item = window.BossPrices.item(id);
+      return b.s5.qty[id] + ' × ' + item.name + ' ($' + (item.price * b.s5.qty[id]) + ')';
+    });
+    var yes = b.s4.survey.filter(function (v) { return v === 'yes'; }).length;
+    var answered = b.s4.survey.filter(function (v) { return v; }).length;
+
+    cell.innerHTML =
+      '<div class="detail-grid">' +
+        '<div><canvas id="logo-' + i + '" width="360" height="360" ' +
+          'aria-label="' + esc(r.bizName) + ' logo"></canvas></div>' +
+        '<div>' +
+          '<h3>Big idea</h3>' +
+          '<p>' + (b.s1.sells
+            ? 'My business sells <strong>' + esc(b.s1.sells) + '</strong> for <strong>' +
+              esc(b.s1['for']) + '</strong> because <strong>' + esc(b.s1.because) + '</strong>.'
+            : '<span class="quiet">Not written yet.</span>') +
+            (b.s1.kind ? ' <span class="quiet">(' + esc(b.s1.kind) + ')</span>' : '') + '</p>' +
+
+          '<h3>Slogans' + (b.s3.trick ? ' <span class="quiet">— ' + esc(b.s3.trick) + '</span>' : '') + '</h3>' +
+          '<ul class="slogans">' +
+            ['a', 'b', 'c'].map(function (k) {
+              if (!(b.s3[k] || '').trim()) return '';
+              var win = b.s3.winner === k;
+              return '<li class="' + (win ? 'win' : '') + '">' + (win ? '🏆 ' : '· ') +
+                esc(b.s3[k]) + '</li>';
+            }).join('') +
+          '</ul>' +
+
+          '<h3>Customer</h3>' +
+          '<dl>' +
+            row('Who', b.s4.who) + row('Age', b.s4.age) + row('Likes', b.s4.likes) +
+            row('Shops at', b.s4.where) + row('Hears about it', b.s4.hear) +
+            row('Survey', answered ? yes + ' of ' + answered + ' said yes' : '') +
+          '</dl>' +
+
+          '<h3>Budget</h3>' +
+          '<dl>' +
+            row('Bought', picked.length ? picked.join(', ') : '') +
+            row('Price', b.s5.price ? '$' + b.s5.price + ' each' : '') +
+            row('Expected to sell', b.s5.sold || '') +
+            row('Money in − money out', money(r.moneyIn) + ' − ' + money(r.moneyOut) +
+              ' = <strong>' + money(r.profit) + '</strong>') +
+          '</dl>' +
+
+          challenges(b) +
+          '<p class="quiet" style="margin:0">From file: ' + esc(r.file) + '</p>' +
+        '</div>' +
+      '</div>';
+
+    if (window.Logo) {
+      Logo.drawLogo(document.getElementById('logo-' + i), {
+        shape: b.s2.shape, icon: b.s2.icon, colors: b.s2.colors,
+        font: b.s2.font, name: r.bizName
+      });
+    }
+  }
+
+  function row(label, value) {
+    if (value === '' || value === null || value === undefined) {
+      return '<dt>' + esc(label) + '</dt><dd class="quiet">—</dd>';
+    }
+    // value may already contain markup we built ourselves
+    return '<dt>' + esc(label) + '</dt><dd>' +
+      (/<strong>/.test(String(value)) ? value : esc(value)) + '</dd>';
+  }
+
+  function challenges(b) {
+    var items = [
+      ['Step 1', b.s1.challenge], ['Step 2', b.s2.challenge], ['Step 3', b.s3.challenge],
+      ['Step 4', b.s4.challenge]
+    ].filter(function (x) { return (x[1] || '').trim(); });
+    if (!items.length) return '';
+    return '<h3>⭐ Challenge answers</h3><dl>' +
+      items.map(function (x) { return row(x[0], x[1]); }).join('') + '</dl>';
+  }
+
+  /* ---- reading files ---- */
+  function addFiles(fileList) {
+    var files = Array.prototype.slice.call(fileList);
+    if (!files.length) return;
+    var bad = [];
+    var pending = files.length;
+
+    files.forEach(function (f) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        var biz = Store.readFile(String(reader.result));
+        if (!biz) bad.push(f.name);
+        else {
+          // opening the same file twice replaces it rather than doubling it up
+          students = students.filter(function (r) { return r.file !== f.name; });
+          students.push(toRow(biz, f.name));
+        }
+        if (--pending === 0) finish(bad);
+      };
+      reader.onerror = function () { bad.push(f.name); if (--pending === 0) finish(bad); };
+      reader.readAsText(f);
+    });
+  }
+
+  function finish(bad) {
+    $('#problems').innerHTML = bad.length
+      ? '<strong>Could not read ' + bad.length + ' file' + (bad.length === 1 ? '' : 's') +
+        ':</strong> ' + esc(bad.join(', ')) +
+        '<br>Those are not Be the Boss files. Look for ones ending in -be-the-boss.json'
+      : '';
+    render();
+  }
+
+  /* ---- CSV, for a gradebook ---- */
+  function toCsv() {
+    var head = ['Student', 'Business', 'Steps finished', 'Sells', 'Customer',
+                'Slogan', 'Money in', 'Money out', 'Profit', 'File'];
+    var lines = [head];
+    students.slice().sort(function (a, b) {
+      return a.nick.toLowerCase() < b.nick.toLowerCase() ? -1 : 1;
+    }).forEach(function (r) {
+      lines.push([r.nick, r.bizName, r.stepCount + ' of 5', r.sells, r.customer,
+                  r.slogan, r.moneyIn, r.moneyOut, r.profit, r.file]);
+    });
+    return lines.map(function (cols) {
+      return cols.map(function (c) {
+        var v = String(c == null ? '' : c);
+        return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }).join(',');
+    }).join('\n');
+  }
+
+  /* ---- wiring ---- */
+  $('#pick').addEventListener('click', function () {
+    $('#files').value = '';
+    $('#files').click();
+  });
+  $('#files').addEventListener('change', function (e) { addFiles(e.target.files); });
+
+  $('#clear').addEventListener('click', function () {
+    if (!window.confirm('Close all ' + students.length + ' files? Nothing is deleted from disk.')) return;
+    students = [];
+    $('#problems').innerHTML = '';
+    render();
+  });
+
+  $('#print').addEventListener('click', function () { window.print(); });
+
+  $('#csv').addEventListener('click', function () {
+    var blob = new Blob([toCsv()], { type: 'text/csv' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'be-the-boss-class.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  });
+
+  document.querySelectorAll('thead th button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var key = b.dataset.sort;
+      if (sortKey === key) sortDir = -sortDir;
+      else { sortKey = key; sortDir = 1; }
+      render();
+    });
+  });
+
+  var drop = $('#drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) {
+      e.preventDefault(); drop.classList.add('is-over');
+    });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    document.addEventListener(ev, function (e) {
+      e.preventDefault();
+      if (ev === 'dragleave' && e.relatedTarget) return;
+      drop.classList.remove('is-over');
+    });
+  });
+  document.addEventListener('drop', function (e) {
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

@@ -18,6 +18,10 @@ cd ~/Desktop/be-the-boss && node tests/print-check.js
 cd ~/Desktop/be-the-boss && node tests/offline-check.js
 ```
 
+```bash
+cd ~/Desktop/be-the-boss && node tests/review-check.js
+```
+
 ## What `clickthrough.js` covers
 
 - All 5 steps at all 3 levels (Guided, On Track, Stretch), end to end.
@@ -36,6 +40,13 @@ cd ~/Desktop/be-the-boss && node tests/offline-check.js
 - No console errors (a missing optional picture in `/assets` is ignored).
 
 `print-check.js` prints the certificate to PDF and checks it is one page.
+
+`review-check.js` builds three pretend students — one finished and in profit,
+one who skipped a step, one making a loss — opens them in the teacher review
+page, and checks the table, the summary counts, sorting, the per-student detail,
+the CSV, that a file which is not ours is refused, that re-opening a file does
+not duplicate the student, and that **no student data is written to the
+browser**.
 
 `offline-check.js` opens the app both ways it gets used — served over http and
 double-clicked as a file — and checks that the shipped font really loads and

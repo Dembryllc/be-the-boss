@@ -26,10 +26,22 @@ host. There is nothing to install and nothing to build.
 
 ## For the teacher
 
-**[`teacher-guide.html`](teacher-guide.html)** is a printable three-page guide:
+Two pages, both just opened in a browser:
+
+**[`teacher-guide.html`](teacher-guide.html)** — a printable three-page guide:
 timings for the five steps, what to watch for in each one, what the three
 levels actually change, how to collect work, and what to do when a student says
-their work is gone. Open it in a browser and press Print.
+their work is gone.
+
+**[`teacher-review.html`](teacher-review.html)** — drop in the files your class
+saved and see everyone as one table: who finished which steps, what they sell,
+their slogan, and their money in, out and profit. Sort by any column, open a
+student for the full detail (their logo, all three slogans with the winner
+marked, the customer card, the budget breakdown and any Challenge answers),
+print it, or download it as a CSV for your gradebook.
+
+Nothing is uploaded and nothing is stored — the files are read inside the page,
+and closing the tab leaves no student data behind.
 
 ## Saving, and getting work off the Chromebook
 
@@ -112,16 +124,18 @@ A **Read Aloud** button on every card uses the browser's own speech.
 ```
 index.html          the student app: five steps and both finish screens
 teacher-guide.html  printable guide for running the lesson
+teacher-review.html open a class's saved files as one table
 css/fonts.css       the shipped Lexend font
 css/styles.css      the look and feel, plus the level toggle rules
 css/print.css       one-page certificate print layout
+js/prices.js        the class price list, shared by the app and the review page
 js/state.js         saved progress, the money math, save and open a file
 js/logo.js          canvas drawing for the logo and poster
 js/steps.js         the five steps, Pitch Day, certificate
 js/app.js           navigation, trail map, read aloud, celebrations
 fonts/              Lexend, plus its licence (OFL.txt)
 assets/README.md    how to drop in your own images later
-tests/              Playwright click-through, print and offline checks
+tests/              Playwright click-through, print, offline and review checks
 ```
 
 ## Credits

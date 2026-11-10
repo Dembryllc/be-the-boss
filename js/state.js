@@ -114,38 +114,38 @@
       return data;
     },
 
-    /* ---- numbers used by step 5, pitch day and the certificate ---- */
-    moneyOut: function () {
-      var out = 0, qty = data.s5.qty;
+    /* ---- the class price list, shared with the teacher review page ---- */
+    START_CASH: window.BossPrices.START_CASH,
+    PRICES: window.BossPrices.LIST,
+    priceItem: function (id) { return window.BossPrices.item(id); },
+
+    /* ---- the money maths ----
+       The "...Of" versions take any business, so the teacher review page can
+       add up a student's file without this app's own data being involved.
+       The short names below are the same thing, for the student in front of us. */
+    moneyOutOf: function (d) {
+      var out = 0, qty = (d && d.s5 && d.s5.qty) || {};
       Object.keys(qty).forEach(function (id) {
-        var item = Store.priceItem(id);
+        var item = window.BossPrices.item(id);
         if (item) out += item.price * qty[id];
       });
       return out;
     },
-    moneyIn: function () { return (Number(data.s5.price) || 0) * (Number(data.s5.sold) || 0); },
-    profit: function () { return Store.moneyIn() - Store.moneyOut(); },
-    cashLeft: function () { return Store.START_CASH - Store.moneyOut(); },
-
-    START_CASH: 20,
-
-    // The class price list, shared by step 5 and the "easy way" button.
-    PRICES: [
-      { id: 'paper',   name: 'Paper pack',             price: 2, emoji: '📄' },
-      { id: 'markers', name: 'Markers',                price: 3, emoji: '🖊️' },
-      { id: 'cups',    name: 'Cups',                   price: 2, emoji: '🥤' },
-      { id: 'sugar',   name: 'Sugar or snacks',        price: 3, emoji: '🍬' },
-      { id: 'beads',   name: 'Beads or craft pieces',  price: 4, emoji: '🧶' },
-      { id: 'soap',    name: 'Soap or cleaning supplies', price: 3, emoji: '🧼' },
-      { id: 'poster',  name: 'Poster board',           price: 1, emoji: '🪧' }
-    ],
-    priceItem: function (id) {
-      return Store.PRICES.filter(function (p) { return p.id === id; })[0] || null;
+    moneyInOf: function (d) {
+      return (Number(d.s5.price) || 0) * (Number(d.s5.sold) || 0);
     },
+    profitOf: function (d) { return Store.moneyInOf(d) - Store.moneyOutOf(d); },
+    cashLeftOf: function (d) { return Store.START_CASH - Store.moneyOutOf(d); },
 
-    /* ---- is a step finished? drives the trail map and the star burst ---- */
-    isDone: function (step) {
-      var d = data;
+    moneyOut: function () { return Store.moneyOutOf(data); },
+    moneyIn: function () { return Store.moneyInOf(data); },
+    profit: function () { return Store.profitOf(data); },
+    cashLeft: function () { return Store.cashLeftOf(data); },
+
+    /* ---- is a step finished? drives the trail map, the star burst, and
+           the teacher review page's progress ticks ---- */
+    isDoneOf: function (d, step) {
+      if (!d) return false;
       if (step === 1) return !!(d.s1.kind && d.s1.sells.trim() && d.s1['for'].trim() && d.s1.because.trim());
       if (step === 2) return !!(d.s2.name.trim() && d.s2.icon && d.s2.shape && d.s2.colors.length >= 1);
       if (step === 3) return !!(d.s3.winner && (d.s3[d.s3.winner] || '').trim());
@@ -155,21 +155,44 @@
         return !!(filled && asked);
       }
       if (step === 5) {
-        return Store.moneyOut() > 0 && Number(d.s5.price) > 0 && Number(d.s5.sold) > 0;
+        return Store.moneyOutOf(d) > 0 && Number(d.s5.price) > 0 && Number(d.s5.sold) > 0;
       }
       return false;
     },
+    isDone: function (step) { return Store.isDoneOf(data, step); },
 
     // Business name falls back to the recipe pieces so the poster is never empty.
-    bizName: function () {
-      var s2 = data.s2;
-      if (s2.name.trim()) return s2.name.trim();
+    bizNameOf: function (d) {
+      var s2 = d.s2;
+      if ((s2.name || '').trim()) return s2.name.trim();
       var parts = [s2.adj, s2.noun, s2.end].filter(Boolean);
       return parts.length > 1 ? parts.join(' ') : '';
     },
-    winningSlogan: function () {
-      var w = data.s3.winner;
-      return w ? (data.s3[w] || '').trim() : '';
+    winningSloganOf: function (d) {
+      var w = d.s3.winner;
+      return w ? (d.s3[w] || '').trim() : '';
+    },
+    bizName: function () { return Store.bizNameOf(data); },
+    winningSlogan: function () { return Store.winningSloganOf(data); },
+
+    // Read one saved file WITHOUT disturbing this app's own data.
+    // Returns a clean business, or null if the file is not ours.
+    readFile: function (text) {
+      var parsed;
+      try { parsed = JSON.parse(text); } catch (e) { return null; }
+      if (!parsed || typeof parsed !== 'object') return null;
+      var biz = parsed.business || parsed;
+      if (!biz || typeof biz !== 'object' || !biz.s1 || !biz.s2 || !biz.s5) return null;
+
+      var clean = blank();
+      merge(clean, biz);
+      clean.s5.qty = {};
+      var q = (biz.s5 && biz.s5.qty) || {};
+      Object.keys(q).forEach(function (id) {
+        var n = Math.floor(Number(q[id]) || 0);
+        if (n > 0 && n <= 5 && window.BossPrices.item(id)) clean.s5.qty[id] = n;
+      });
+      return clean;
     }
   };
 
