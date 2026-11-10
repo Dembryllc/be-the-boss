@@ -77,6 +77,15 @@ h2[tabindex="-1"]:focus,h2[tabindex="-1"]:focus-visible{outline:none}
 .level-btn[aria-pressed="true"]{background:var(--blueberry);color:#fff;
   box-shadow:0 3px 0 rgba(43,35,66,.2)}
 
+/* save / open / start over, and the "Saved" flash */
+.work-tools{display:flex;flex-wrap:wrap;gap:8px}
+.work-tools .btn{font-size:.9rem;padding:10px 14px}
+.saved-flag{font-size:.85rem;font-weight:700;color:#1d8f73;background:#E8F7F2;
+  border:2px solid var(--mint);border-radius:999px;padding:6px 12px;
+  opacity:0;transform:translateY(-4px);
+  transition:opacity .2s ease, transform .2s ease}
+.saved-flag.is-on{opacity:1;transform:none}
+
 /* ---------- buttons ---------- */
 .btn{
   min-height:var(--tap);min-width:var(--tap);
@@ -129,6 +138,9 @@ main{max-width:1000px;margin:0 auto;padding:4px 16px 70px}
   margin-right:8px;letter-spacing:.5px;text-transform:uppercase}
 
 .step-nav{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:18px 0 10px}
+
+.save-note{background:#F4FBF8;border:3px solid var(--mint);border-radius:16px;
+  padding:12px 14px;font-size:1rem}
 
 .privacy-note{
   display:flex;flex-direction:column;gap:4px;
@@ -255,6 +267,7 @@ body.level-guided button.guided-only,body.level-guided .btn.guided-only{display:
 .btn-winner.is-winner{background:var(--sun);color:var(--ink);box-shadow:0 4px 0 var(--sun-deep)}
 .btn-winner.is-winner::before{content:"🏆 ";}
 .poster{display:flex;justify-content:center;margin:10px 0}
+.poster-tools{display:flex;justify-content:center;margin:0 0 10px}
 #poster-canvas{width:100%;max-width:330px;height:auto;border-radius:16px;
   box-shadow:0 8px 20px rgba(43,35,66,.18)}
 
@@ -387,6 +400,13 @@ body.level-guided button.guided-only,body.level-guided .btn.guided-only{display:
   *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;
     transition-duration:.001s !important}
   .btn:hover,.chip:hover,.kind-card:hover,.trick-card:hover,.pick:hover{transform:none}
+}
+
+/* Narrow screens: shorten the header so it does not eat the page */
+@media (max-width:900px){
+  .level-label{display:none}
+  .work-tools .btn .long{display:none}
+  .site-head{gap:8px}
 }
 
 /* ---------- small screens / Chromebook ---------- */

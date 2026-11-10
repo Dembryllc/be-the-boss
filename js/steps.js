@@ -235,23 +235,44 @@
     });
   }
 
+  /* ---- naming downloads so a teacher can tell whose is whose ---- */
+  function slug(t) {
+    return String(t || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+  function fileBase() {
+    var parts = [slug(S.data.nickname), slug(S.bizName())].filter(Boolean);
+    return parts.join('-').slice(0, 60) || 'my-business';
+  }
+
+  // Shared by the logo and the poster: hand the student a PNG.
+  function saveCanvas(canvas, suffix, okMsg) {
+    canvas.toBlob(function (blob) {
+      if (!blob) { window.App.toast('Could not make the file. Try again.'); return; }
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = fileBase() + suffix;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+      window.App.toast(okMsg);
+    }, 'image/png');
+  }
+
   function downloadLogo() {
-    var src = $('#logo-canvas');
     // draw at double size so the printed logo stays crisp
     var big = document.createElement('canvas');
     big.width = 880; big.height = 880;
     L.drawLogo(big, logoData());
-    var safe = (S.bizName() || 'my-logo').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    big.toBlob(function (blob) {
-      if (!blob) { window.App.toast('Could not make the file. Try again.'); return; }
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a');
-      a.href = url; a.download = (safe || 'my-logo') + '-logo.png';
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
-      window.App.toast('Logo saved to your Downloads! ⬇');
-    }, 'image/png');
-    void src;
+    saveCanvas(big, '-logo.png', 'Logo saved to your Downloads! ⬇');
+  }
+
+  function downloadPoster() {
+    var big = document.createElement('canvas');
+    big.width = 1040; big.height = 1360;
+    var ld = logoData();
+    ld.slogan = S.winningSlogan();
+    L.drawPoster(big, ld);
+    saveCanvas(big, '-poster.png', 'Poster saved to your Downloads! ⬇');
   }
 
   /* ---------- step 3: slogan ---------- */
@@ -272,6 +293,8 @@
       el.value = d[k] || '';
       el.addEventListener('input', function () { d[k] = el.value; paint3(); changed(3); });
     });
+
+    $('#s3-download').addEventListener('click', downloadPoster);
 
     $$('.btn-winner').forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -601,6 +624,7 @@
       initPitch(); initCert();
     },
     refresh: refresh,
-    repaintArt: function () { paint2(); paint3(); paintCert(); }
+    repaintArt: function () { paint2(); paint3(); paintCert(); },
+    fileBase: fileBase
   };
 })();

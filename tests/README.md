@@ -23,6 +23,10 @@ cd ~/Desktop/be-the-boss && node tests/print-check.js
 - The survey tally and bar, the pitch lines, the timer.
 - Budget maths against 5 worked cases, and that $20 cannot be overspent.
 - Progress survives a reload; **Start over** really clears it.
+- Save to a file and open it again: the file is named after the student, holds
+  the whole business, is refused if it is not ours, and a refused file leaves
+  the student's work alone.
+- The logo and poster download as PNGs named after the student.
 - Reduced motion: no confetti, animations off, nothing breaks.
 - Keyboard only, and every tap target at least 48 × 48 px on every screen.
 - No console errors (a missing optional picture in `/assets` is ignored).

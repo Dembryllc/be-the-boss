@@ -41,24 +41,33 @@
 
   var data = blank();
 
+  // Copy one saved business onto the live data.
+  function applySaved(saved) {
+    merge(data, saved);
+    // The supply list is a free-form map, so merge() cannot walk it.
+    // Copy it over by hand and check every value before trusting it.
+    data.s5.qty = {};
+    var savedQty = (saved && saved.s5 && saved.s5.qty) || {};
+    Object.keys(savedQty).forEach(function (id) {
+      var n = Math.floor(Number(savedQty[id]) || 0);
+      if (n > 0 && n <= 5 && Store.priceItem(id)) data.s5.qty[id] = n;
+    });
+  }
+
+  // Does this look like a real business, rather than an empty start?
+  function hasWork(d) {
+    return !!(d.nickname || d.s1.kind || d.s1.sells || d.s2.name || d.s2.icon ||
+      d.s3.a || d.s3.b || d.s3.c || d.s4.who || Object.keys(d.s5.qty).length);
+  }
+
   var Store = {
     data: data,
+    onSave: null,          // the app uses this to flash "Saved"
 
     load: function () {
       try {
         var raw = localStorage.getItem(KEY);
-        if (raw) {
-          var saved = JSON.parse(raw);
-          merge(data, saved);
-          // The supply list is a free-form map, so merge() cannot walk it.
-          // Copy it over by hand and check every value before trusting it.
-          data.s5.qty = {};
-          var savedQty = (saved && saved.s5 && saved.s5.qty) || {};
-          Object.keys(savedQty).forEach(function (id) {
-            var n = Math.floor(Number(savedQty[id]) || 0);
-            if (n > 0 && n <= 5 && Store.priceItem(id)) data.s5.qty[id] = n;
-          });
-        }
+        if (raw) applySaved(JSON.parse(raw));
       } catch (e) { /* private mode or bad JSON: carry on with a blank slate */ }
       return data;
     },
@@ -66,6 +75,36 @@
     save: function () {
       try { localStorage.setItem(KEY, JSON.stringify(data)); }
       catch (e) { /* storage full or blocked: the app still works for this session */ }
+      if (typeof Store.onSave === 'function') Store.onSave();
+    },
+
+    hasWork: function () { return hasWork(data); },
+
+    /* ---- saving to a file, so work can move between Chromebooks ---- */
+    toFile: function () {
+      return JSON.stringify({
+        app: 'be-the-boss',
+        version: 1,
+        savedOn: new Date().toISOString().slice(0, 10),
+        business: data
+      }, null, 2);
+    },
+
+    // Returns true if the file was a real Be the Boss file and was loaded.
+    fromFile: function (text) {
+      var parsed;
+      try { parsed = JSON.parse(text); } catch (e) { return false; }
+      if (!parsed || typeof parsed !== 'object') return false;
+
+      // accept the wrapped file, and also a bare business object
+      var biz = parsed.business || parsed;
+      if (!biz || typeof biz !== 'object' || !biz.s1 || !biz.s2 || !biz.s5) return false;
+
+      var fresh = blank();                     // start clean, not on top of this student
+      Object.keys(fresh).forEach(function (k) { data[k] = fresh[k]; });
+      applySaved(biz);
+      Store.save();
+      return true;
     },
 
     reset: function () {

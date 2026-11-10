@@ -238,6 +238,55 @@
     window.addEventListener('pagehide', function () { if (synth) synth.cancel(); });
   }
 
+  /* ---------- saving work to a file ----------
+     This is how a student moves work to another Chromebook, keeps it when a
+     device is shared, or hands it in. Still no accounts and no server: the
+     file goes wherever the student puts it. */
+  function wireWorkFiles() {
+    var fileInput = $('#work-file');
+
+    $('#save-work').addEventListener('click', function () {
+      if (!S.hasWork()) { toast('Fill in a little first, then save.'); return; }
+      var blob = new Blob([S.toFile()], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = window.Steps.fileBase() + '-be-the-boss.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+      toast('Saved! Keep that file to open on any computer.', true);
+    });
+
+    $('#open-work').addEventListener('click', function () {
+      if (S.hasWork() && !window.confirm(
+        'Opening a file replaces the business on this computer. Keep going?')) return;
+      fileInput.value = '';        // so picking the same file twice still works
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', function () {
+      var file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        if (S.fromFile(String(reader.result))) location.reload();
+        else toast('That is not a Be the Boss file. Look for one ending in .json');
+      };
+      reader.onerror = function () { toast('Could not read that file.'); };
+      reader.readAsText(file);
+    });
+  }
+
+  /* ---------- the "Saved" flash, so nobody hunts for a Save button ---------- */
+  var savedTimer = null;
+  function flashSaved() {
+    var el = $('#saved-flag');
+    if (!el) return;
+    el.classList.add('is-on');
+    clearTimeout(savedTimer);
+    savedTimer = setTimeout(function () { el.classList.remove('is-on'); }, 1400);
+  }
+
   /* ---------- start over ---------- */
   function wireStartOver() {
     $('#start-over').addEventListener('click', function () {
@@ -318,12 +367,16 @@
 
     wireReadAloud();
     wireStartOver();
+    wireWorkFiles();
     wireOptionalArt();
 
     // keep the done flags honest after a reload
     for (var i = 1; i <= 5; i++) S.data.done[i] = S.isDone(i);
 
     go(S.data.screen || 0);
+
+    // only flash "Saved" for the student's own edits, not the save on load
+    S.onSave = flashSaved;
 
     // Lexend arrives after the first paint, so draw the logo again once it is ready
     if (document.fonts && document.fonts.ready) {

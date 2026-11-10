@@ -2,7 +2,8 @@
 @page{size:letter portrait;margin:12mm}
 
 body{background:#fff !important;font-size:12pt}
-.site-head,.trail-wrap,.step-nav,.fx-layer,.toast,.no-print-card,.skip-link{display:none !important}
+.site-head,.trail-wrap,.step-nav,.fx-layer,.toast,.no-print-card,.skip-link,
+.saved-flag,.poster-tools{display:none !important}
 main{max-width:none;padding:0}
 .screen{display:none !important}
 .screen.is-active{display:block !important}

@@ -38,7 +38,14 @@
       <button type="button" class="level-btn" data-level="ontrack" aria-pressed="true">On Track</button>
       <button type="button" class="level-btn" data-level="stretch" aria-pressed="false">Stretch</button>
     </div>
-    <button type="button" id="start-over" class="btn btn-quiet">↺ Start over</button>
+    <div class="work-tools">
+      <button type="button" id="save-work" class="btn btn-quiet">💾 Save<span class="long"> my work</span></button>
+      <button type="button" id="open-work" class="btn btn-quiet">📂 Open<span class="long"> my work</span></button>
+      <button type="button" id="start-over" class="btn btn-quiet">↺ Start over</button>
+    </div>
+    <span id="saved-flag" class="saved-flag" role="status">Saved</span>
+    <!-- hidden: the Open button clicks this for the student -->
+    <input type="file" id="work-file" accept=".json,application/json" hidden>
   </div>
 </header>
 
@@ -100,13 +107,17 @@
 
     <div class="privacy-note">
       <strong>🔒 Use a nickname, not your real name.</strong>
-      <span>Never type your last name. Everything you make stays on this computer only.</span>
+      <span>Never type your last name. Nothing you make is ever sent over the internet.</span>
     </div>
 
     <label class="field">
       <span class="field-label">My boss nickname</span>
       <input type="text" id="nickname" maxlength="18" placeholder="Example: Captain Lemon" autocomplete="off">
     </label>
+
+    <p class="speak save-note">Your work saves by itself as you go. To move it to
+      another Chromebook, or to hand it in, tap <strong>Save</strong> at the top.
+      Tap <strong>Open</strong> to bring it back.</p>
 
     <div class="choice-row guided-only" data-fills="#nickname">
       <button type="button" class="chip">Captain Lemon</button>
@@ -394,6 +405,9 @@
     <div class="poster" id="s3-poster">
       <canvas id="poster-canvas" width="520" height="680" role="img" aria-label="Your poster preview"></canvas>
     </div>
+    <div class="poster-tools">
+      <button type="button" class="btn btn-mini" id="s3-download">⬇ Download poster (PNG)</button>
+    </div>
 
     <div class="challenge">
       <h4>⭐ Challenge</h4>
@@ -587,8 +601,9 @@
       <h2>🏅 Business Card &amp; Certificate</h2>
       <button type="button" class="btn read-aloud">🔊 Read Aloud</button>
     </div>
-    <p class="speak">This page fits on one sheet of paper. Press Print to take it home.</p>
-    <button type="button" class="btn" id="print-btn">🖨 Print this page</button>
+    <p class="speak">This page fits on one sheet of paper. Press the button to print it,
+      or choose <strong>Save as PDF</strong> in the print window to keep it as a file.</p>
+    <button type="button" class="btn" id="print-btn">🖨 Print or save as PDF</button>
   </div>
 
   <div class="cert-sheet" id="cert-sheet">

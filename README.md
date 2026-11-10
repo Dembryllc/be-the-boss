@@ -24,12 +24,50 @@ cd ~/Desktop/be-the-boss && python3 -m http.server 8080
 To put it on Chromebooks, copy this whole folder to Google Drive or any web
 host. There is nothing to install and nothing to build.
 
+## Saving, and getting work off the Chromebook
+
+**There is no Save button to hunt for.** Every keystroke saves itself, and a
+small green **Saved** flash in the header confirms it. That save lives in the
+browser's own storage box on that one computer, for that one web address.
+
+Three things follow from that, and the header buttons handle all three:
+
+| Button | What it is for |
+| ------ | -------------- |
+| **💾 Save** | Downloads the whole business as one small file, named after the student (`captain-lemon-sunny-slime-shop-be-the-boss.json`). |
+| **📂 Open** | Loads that file back, on any computer. |
+| **↺ Start over** | Erases the business on this computer (it asks first). |
+
+Use **Save** when a student needs to:
+
+- **move to a different Chromebook** — work does not follow an account, it
+  stays on the device, so it has to travel as a file;
+- **share a device** — a second student on the same browser profile would
+  otherwise overwrite the first;
+- **hand it in** — have them drop the file in a Drive folder or a Classroom
+  assignment.
+
+Each student gets their own version automatically **if they sign into the
+Chromebook with their own Google account** — separate profile, separate
+storage box. On a shared profile, use the Save file.
+
+### What students can take away as files
+
+- **Logo** — "Download logo (PNG)" in step 2.
+- **Poster** — "Download poster (PNG)" in step 3.
+- **Certificate** — "Print or save as PDF" on the last screen (one page).
+
+All three are named after the student and the business, so a folder of 25
+files tells you whose is whose at a glance.
+
 ## Privacy
 
 - No accounts, no backend, no analytics, no tracking.
-- Nothing is sent anywhere. Progress is saved in the browser's `localStorage`
-  on that one computer, and **Start over** erases it.
-- Students are told to use a nickname and never type a last name.
+- **Nothing is ever sent over the internet.** Progress is saved in the
+  browser's `localStorage` on that one computer, and **Start over** erases it.
+  The Save file goes only where the student puts it.
+- Students are told to use a nickname and never type a last name. The saved
+  file contains only what they typed into the app.
 - The one network request is the Lexend font from Google Fonts. If the school
   network blocks it, the app falls back to a system font and still works.
 

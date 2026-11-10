@@ -1,6 +1,9 @@
 /* Playwright click-through: all 5 steps at all 3 levels, plus budget math.
    Run:  node tests/clickthrough.js        (needs a server on :8080) */
 const { chromium } = require('playwright');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 
 const URL = process.env.APP_URL || 'http://localhost:8080/index.html';
 const LEVELS = ['guided', 'ontrack', 'stretch'];
@@ -115,7 +118,10 @@ async function runLevel(browser, level) {
   const dl = page.waitForEvent('download', { timeout: 8000 });
   await page.click('#s2-download');
   const file = await dl;
-  check('logo downloads as PNG', /\.png$/.test(file.suggestedFilename()), file.suggestedFilename());
+  const logoName = file.suggestedFilename();
+  check('logo downloads as PNG', /\.png$/.test(logoName), logoName);
+  check('logo filename names the student and the business',
+    logoName.startsWith('captain-lemon-sunny-slime-shop') && logoName.endsWith('-logo.png'), logoName);
   if (level === 'stretch') await page.fill('#s2-challenge', 'Sunny Slime');
   await page.click('#screen-2 .btn-next');
 
@@ -128,6 +134,12 @@ async function runLevel(browser, level) {
   await page.click('.btn-winner[data-slogan="b"]');
   check('winner marked', (await page.textContent('.btn-winner[data-slogan="b"]')).includes('Winner!'));
   check('poster has drawing', (await canvasInk(page, '#poster-canvas')) > 20000);
+  const pdl = page.waitForEvent('download', { timeout: 8000 });
+  await page.click('#s3-download');
+  const posterFile = await pdl;
+  check('poster downloads as a named PNG',
+    posterFile.suggestedFilename().startsWith('captain-lemon-sunny-slime-shop') &&
+    posterFile.suggestedFilename().endsWith('-poster.png'), posterFile.suggestedFilename());
   if (level === 'stretch') await page.fill('#s3-challenge', 'Squish away!');
   await page.click('#screen-3 .btn-next');
 
@@ -235,6 +247,115 @@ async function runLevel(browser, level) {
   check('start over clears the trail', (await page.locator('.trail-stop.is-done').count()) === 0);
 
   check('no console errors', errors.length === 0, errors.join(' | '));
+  await ctx.close();
+}
+
+/* ---- saving work to a file and opening it again ---- */
+async function workFiles(browser) {
+  console.log('\n=== SAVE AND OPEN A FILE ===');
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 768 },
+    acceptDownloads: true });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.goto(URL);
+  await page.evaluate(() => localStorage.clear());
+  await page.reload();
+
+  // nothing filled in yet: saving should say so rather than make an empty file
+  await page.click('#save-work');
+  check('saving an empty start is refused',
+    (await page.textContent('#toast')).includes('Fill in a little first'),
+    await page.textContent('#toast'));
+
+  // build a business
+  await page.evaluate(() => {
+    Object.assign(Store.data, {
+      nickname: 'Captain Lemon',
+      s1: { kind: 'Make It', sells: 'colorful slime', for: 'kids in my class',
+            because: 'it is fun to squish', challenge: '' },
+      s2: { name: 'Sunny Slime Shop', adj: 'Sunny', noun: 'Slime', end: 'Shop',
+            shape: 'star', icon: '\u2728', colors: ['#FFC94A', '#4B7BEC'], font: 'round',
+            readOk: true, challenge: '' },
+      s3: { trick: 'Command', a: 'a', b: 'Squish the day away!', c: 'c',
+            winner: 'b', challenge: '' },
+      s4: { who: 'a kid in 4th grade', age: '9 to 11 years old', likes: 'games',
+            where: 'the school market day', hear: 'a poster at school',
+            survey: ['yes', 'yes', 'yes', 'no', 'yes'], challenge: '' },
+      s5: { qty: { paper: 1, markers: 1, cups: 1 }, price: 2, sold: 10 }
+    });
+    Store.save();
+  });
+  await page.reload();
+
+  // the "Saved" flash tells the student there is no Save button to hunt for
+  await page.fill('#nickname', 'Captain Lemon!');
+  await page.waitForTimeout(150);
+  check('the Saved flash appears while typing',
+    await page.locator('#saved-flag.is-on').isVisible());
+  await page.fill('#nickname', 'Captain Lemon');
+
+  const wdl = page.waitForEvent('download', { timeout: 8000 });
+  await page.click('#save-work');
+  const work = await wdl;
+  const name = work.suggestedFilename();
+  check('work file is named after the student',
+    name === 'captain-lemon-sunny-slime-shop-be-the-boss.json', name);
+
+  const saved = path.join(os.tmpdir(), 'be-the-boss-work.json');
+  await work.saveAs(saved);
+  const text = fs.readFileSync(saved, 'utf8');
+  const parsed = JSON.parse(text);
+  check('the file says what it is', parsed.app === 'be-the-boss' && parsed.version === 1);
+  check('the file holds the whole business',
+    parsed.business.s2.name === 'Sunny Slime Shop' &&
+    parsed.business.s5.qty.markers === 1 &&
+    parsed.business.s3.winner === 'b');
+  check('the file holds no last name or anything typed outside the app',
+    !/lastName|email|@/.test(text));
+
+  // wipe this computer, the way a shared Chromebook would
+  page.once('dialog', (d) => d.accept());
+  await page.click('#start-over');
+  await page.waitForSelector('#screen-0.is-active');
+  check('the computer is empty again', (await page.inputValue('#nickname')) === '');
+
+  // open the file back up
+  await page.setInputFiles('#work-file', saved);
+  await page.waitForFunction(() => Store.data.s2.name === 'Sunny Slime Shop',
+    null, { timeout: 8000 });
+  await page.waitForSelector('#screen-0.is-active, #screen-7.is-active');
+  const back = await page.evaluate(() => ({
+    nick: Store.data.nickname,
+    biz: Store.bizName(),
+    slogan: Store.winningSlogan(),
+    out: Store.moneyOut(),
+    profit: Store.profit(),
+    survey: Store.data.s4.survey.join(',')
+  }));
+  check('opening the file brings the nickname back', back.nick === 'Captain Lemon', back.nick);
+  check('opening the file brings the business back', back.biz === 'Sunny Slime Shop', back.biz);
+  check('opening the file brings the slogan back',
+    back.slogan === 'Squish the day away!', back.slogan);
+  check('opening the file brings the budget back',
+    back.out === 7 && back.profit === 13, back.out + '/' + back.profit);
+  check('opening the file brings the survey back', back.survey === 'yes,yes,yes,no,yes', back.survey);
+  check('the trail shows the work as finished',
+    (await page.locator('.trail-stop.is-done').count()) === 5);
+
+  // a file that is not ours must be refused, and must not wipe their work
+  const junk = path.join(os.tmpdir(), 'not-ours.json');
+  fs.writeFileSync(junk, JSON.stringify({ hello: 'world' }));
+  await page.setInputFiles('#work-file', junk);
+  await page.waitForTimeout(500);
+  check('a file that is not ours is refused',
+    (await page.textContent('#toast')).includes('not a Be the Boss file'),
+    await page.textContent('#toast'));
+  check('a refused file leaves the work alone',
+    (await page.evaluate(() => Store.bizName())) === 'Sunny Slime Shop');
+
+  check('no page errors while saving and opening', errors.length === 0, errors.join(' | '));
+  fs.unlinkSync(saved); fs.unlinkSync(junk);
   await ctx.close();
 }
 
@@ -431,6 +552,7 @@ async function keyboard(browser) {
   for (const level of LEVELS) await runLevel(browser, level);
   await reducedMotion(browser);
   await keyboard(browser);
+  await workFiles(browser);
   await budgetMath(browser);
   await screenshots(browser);
   await browser.close();
