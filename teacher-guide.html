@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Be the Boss! — Teacher Guide</title>
+<meta name="description" content="How to run the Be the Boss! business activity with a 4th-grade ICT class.">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='78' font-size='80'%3E%F0%9F%93%8B%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#2B2342; --soft:#5A5070; --line:#E8D7BC; --cream:#FFF8EC;
+    --sun:#FFC94A; --tomato:#FF6B5B; --mint:#35C9A3; --blue:#4B7BEC; --grape:#9B6BE8;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0 auto; max-width:860px; padding:28px 22px 60px;
+    font-family:'Lexend','Trebuchet MS',system-ui,sans-serif;
+    font-size:16px; line-height:1.5; color:var(--ink); background:var(--cream);
+  }
+  h1{font-size:1.9rem; margin:0 0 .15em}
+  h2{font-size:1.2rem; margin:1.6em 0 .4em; padding-bottom:.2em;
+     border-bottom:3px solid var(--line)}
+  h3{font-size:1rem; margin:1.1em 0 .3em}
+  p,li{margin:0 0 .6em}
+  .lede{font-size:1.05rem; color:var(--soft); margin-bottom:1.2em}
+  .print-btn{
+    display:inline-block; border:0; border-radius:12px; cursor:pointer;
+    font:inherit; font-weight:700; color:#fff; background:var(--blue);
+    padding:12px 20px; box-shadow:0 4px 0 #2f5bc4; margin-bottom:10px;
+  }
+  table{width:100%; border-collapse:collapse; margin:.6em 0 1em; font-size:.95rem}
+  th,td{text-align:left; vertical-align:top; padding:8px 10px; border-bottom:2px solid var(--line)}
+  thead th{font-size:.8rem; text-transform:uppercase; letter-spacing:.5px; color:var(--soft)}
+  tbody th{font-weight:700; white-space:nowrap}
+  .box{border:3px solid var(--line); border-radius:14px; padding:12px 16px; margin:.8em 0;
+       background:#fff; break-inside:avoid}
+  .box h3{margin-top:0}
+  .box-warn{border-color:var(--tomato); background:#FFF4F2}
+  .box-tip{border-color:var(--mint); background:#F4FBF8}
+  .box-key{border-color:var(--sun); background:#FFF8E9}
+  code{background:#fff; border:1px solid var(--line); border-radius:6px;
+       padding:1px 6px; font-size:.9em}
+  ul{padding-left:1.2em; margin-top:0}
+  .levels{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .level{border:3px solid var(--line); border-radius:14px; padding:12px 14px; background:#fff}
+  .level h3{margin:0 0 .3em}
+  .level.guided{border-color:var(--mint)}
+  .level.ontrack{border-color:var(--blue)}
+  .level.stretch{border-color:var(--grape)}
+  footer{margin-top:2em; padding-top:.8em; border-top:3px solid var(--line);
+         font-size:.85rem; color:var(--soft)}
+
+  @media print{
+    @page{size:letter portrait; margin:12mm}
+    body{background:#fff; font-size:10.5pt; padding:0; max-width:none}
+    .print-btn,.no-print{display:none !important}
+    h1{font-size:19pt}
+    h2{font-size:12pt; margin:11pt 0 4pt; break-after:avoid}
+    h3{break-after:avoid}
+    table{font-size:9pt}
+    .box,.levels{break-inside:avoid}
+    tr{break-inside:avoid}        /* rows stay whole, but a long table may split */
+    thead{display:table-header-group}  /* repeat the headings on the next page */
+    a{text-decoration:none; color:inherit}
+  }
+</style>
+</head>
+<body>
+
+<button type="button" class="print-btn no-print" onclick="window.print()">🖨 Print this guide</button>
+
+<h1>Be the Boss! — Teacher Guide</h1>
+<p class="lede">A 4th-grade ICT activity. Students invent a pretend business in five
+steps, then pitch it and print a certificate. Nothing is installed, nothing is
+submitted online, and no student data leaves the Chromebook.</p>
+
+<h2>Before the first lesson</h2>
+<ul>
+  <li><strong>Opening it:</strong> put the <code>be-the-boss</code> folder on Drive or
+      any web address and give students the link, or open <code>index.html</code>
+      straight from the device.</li>
+  <li><strong>Use one address for the whole class.</strong> The app saves work against
+      the exact address it was opened from. If some students use a link and others
+      open the file, their saved work will not line up.</li>
+  <li><strong>Check sign-in.</strong> If each student signs into the Chromebook with
+      their own account, each gets their own business automatically. If devices
+      are shared on one profile, read <em>Collecting work</em> below first.</li>
+  <li><strong>No account, no login, no setup.</strong> There is nothing to create.</li>
+</ul>
+
+<div class="box box-key">
+  <h3>The one rule to say out loud</h3>
+  <p style="margin:0">“Use a nickname. Never type your last name.” The app says it too,
+  on the first screen. Nothing students type is sent anywhere, but the habit is
+  the point.</p>
+</div>
+
+<h2>The five steps</h2>
+<p>Each step is one screen with one skill. Roughly 25–35 minutes each, or run
+two in a longer block. Students can move back and forth freely — nothing is
+locked, on purpose.</p>
+
+<table>
+  <thead>
+    <tr><th>Step</th><th>The skill</th><th>What students do</th><th>Watch for</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1. Big Idea</th>
+      <td>A business solves a problem for someone</td>
+      <td>Choose Make It, Do It, or Fix It, then finish
+          “My business sells ___ for ___ because ___.”</td>
+      <td>“Because it’s cool” — push for a reason a <em>customer</em> would give.</td>
+    </tr>
+    <tr>
+      <th>2. Name &amp; Logo</th>
+      <td>Design with limits</td>
+      <td>Name recipe (describing word + thing word), then a logo: one shape,
+          one picture, up to three colours, one font.</td>
+      <td>The three-colour cap is the lesson. The app refuses a fourth — ask them
+          which one they are giving up and why.</td>
+    </tr>
+    <tr>
+      <th>3. Slogan</th>
+      <td>Persuasive language</td>
+      <td>Pick a trick (rhyme, same starting sound, command, question), write
+          three slogans, tap a winner, see it on a poster.</td>
+      <td>Writing only one and tapping it. Insist on three — comparing is the skill.</td>
+    </tr>
+    <tr>
+      <th>4. Customers</th>
+      <td>Audience, and asking real people</td>
+      <td>Fill in a customer card, then survey five classmates with Yes / No.
+          The tally and bar update as they tap.</td>
+      <td>Surveying friends who always say yes. Ask what a “no” would teach them.</td>
+    </tr>
+    <tr>
+      <th>5. Budget</th>
+      <td>Money in, money out, profit</td>
+      <td>$20 pretend cash, buy from the class price list, set a price and how
+          many they will sell. Profit = Money In − Money Out.</td>
+      <td>Pricing at $20 to “win”. Ask whether a classmate would really pay that.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Then: Pitch Day and the certificate</h3>
+<ul>
+  <li><strong>Pitch Day</strong> writes their pitch for them from their own answers,
+      with a get-ready checklist and a one-minute timer. Good for partner practice
+      before the real thing.</li>
+  <li><strong>Certificate</strong> is a one-page printable with their logo, slogan,
+      customer and profit. <em>Print or save as PDF</em> works either way.</li>
+</ul>
+
+<h2>The three levels</h2>
+<p>The toggle sits in the top right and is always visible. Change it any time,
+mid-step — nothing is lost. You can also set different levels on different
+devices for the same lesson.</p>
+
+<div class="levels">
+  <div class="level guided">
+    <h3>Guided</h3>
+    <p style="margin:0">Tap-to-choose word chips instead of typing, pre-filled
+    choices, and a “Fill it in the easy way” button on the budget. For students
+    who stall at a blank box.</p>
+  </div>
+  <div class="level ontrack">
+    <h3>On Track</h3>
+    <p style="margin:0">Sentence starters appear as optional hints. The default
+    for most of the class.</p>
+  </div>
+  <div class="level stretch">
+    <h3>Stretch</h3>
+    <p style="margin:0">Hints come off and a Challenge box appears on every step,
+    including a “what if you sold half as many?” recalculation on the budget.</p>
+  </div>
+</div>
+
+<div class="box box-tip">
+  <h3>Read Aloud</h3>
+  <p style="margin:0">Every card has a <strong>Read Aloud</strong> button that reads
+  that screen using the Chromebook’s own voice. Headphones help. If a device has
+  speech switched off, the button says so rather than hanging.</p>
+</div>
+
+<h2>Collecting work</h2>
+<p>Work saves itself as students type — there is no Save button to hunt for, and
+a small green <strong>Saved</strong> flash confirms it. That save lives on
+<em>that device, in that browser profile</em>. It does not follow a student to a
+different Chromebook.</p>
+
+<p>So the header has three buttons:</p>
+<table>
+  <tbody>
+    <tr><th>💾 Save</th><td>Downloads the whole business as one small file named after
+      the student, for example <code>captain-lemon-sunny-slime-shop-be-the-boss.json</code>.</td></tr>
+    <tr><th>📂 Open</th><td>Loads that file back, on any computer.</td></tr>
+    <tr><th>↺ Start over</th><td>Erases the business on this device. It asks first.</td></tr>
+  </tbody>
+</table>
+
+<p><strong>To hand work in:</strong> have students tap Save, then drop the file into a
+Drive folder or a Classroom assignment. The filenames tell you whose is whose
+without opening any of them.</p>
+
+<div class="box box-warn">
+  <h3>If Chromebooks are shared</h3>
+  <p style="margin:0">On a shared profile the app holds <strong>one</strong> business
+  at a time, and the next student will overwrite the last one with no warning.
+  End every lesson with “tap Save before you close the lid,” and start the next
+  one with “tap Open and choose your file.” Treat it like handing out and
+  collecting books.</p>
+</div>
+
+<h3>Pictures they can keep</h3>
+<ul>
+  <li><strong>Logo</strong> — “Download logo (PNG)” in step 2. Good for a display board.</li>
+  <li><strong>Poster</strong> — “Download poster (PNG)” in step 3.</li>
+  <li><strong>Certificate</strong> — print it, or choose <em>Save as PDF</em> in the
+      print window.</li>
+</ul>
+
+<h2>If something goes wrong</h2>
+<table>
+  <tbody>
+    <tr>
+      <th>“My work is gone”</th>
+      <td>Almost always a different device, a different browser profile, or a
+          different web address than last time. If they saved a file, tap
+          <strong>Open</strong>. If not, it is gone — the app keeps no copy anywhere else.</td>
+    </tr>
+    <tr>
+      <th>Two students, one device</th>
+      <td>Each taps <strong>Save</strong> at the end and <strong>Open</strong> at the
+          start. There is no second slot on one profile.</td>
+    </tr>
+    <tr>
+      <th>Nothing loads</th>
+      <td>The app needs no internet at all — the font ships with it. If the page is
+          blank, the folder was probably copied without its <code>css</code>,
+          <code>js</code> or <code>fonts</code> folders. Copy the whole folder.</td>
+    </tr>
+    <tr>
+      <th>Animations are too much</th>
+      <td>Turn on <em>Reduce motion</em> in Chromebook accessibility settings. The app
+          follows it: no confetti, no sliding, everything still works.</td>
+    </tr>
+    <tr>
+      <th>A student is stuck on a blank box</th>
+      <td>Switch them to <strong>Guided</strong>. They can tap words instead of typing.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Where it could go next</h2>
+<ul>
+  <li><strong>Market day.</strong> Print the posters and certificates, set up desks as
+      stalls, and let students pitch to another class.</li>
+  <li><strong>Real maths.</strong> Re-run step 5 with the actual cost of something you
+      could make in class, and compare the guess to the real number.</li>
+  <li><strong>Survey for real.</strong> Do the step 4 survey across two classes and talk
+      about why the numbers differ.</li>
+  <li><strong>Redesign round.</strong> After the pitches, give one round of feedback and
+      let them change one thing — name, slogan, or price — and explain why.</li>
+</ul>
+
+<footer>
+  Be the Boss! · No accounts, no backend, no analytics, and no network requests.
+  Student work stays on the device unless a student saves it to a file.
+  Lexend font © The Lexend Project Authors, SIL Open Font License 1.1
+  (see <code>fonts/OFL.txt</code>).
+</footer>
+
+</body>
+</html>

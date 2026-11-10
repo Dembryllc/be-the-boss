@@ -14,6 +14,10 @@ cd ~/Desktop/be-the-boss && npm install playwright && node tests/clickthrough.js
 cd ~/Desktop/be-the-boss && node tests/print-check.js
 ```
 
+```bash
+cd ~/Desktop/be-the-boss && node tests/offline-check.js
+```
+
 ## What `clickthrough.js` covers
 
 - All 5 steps at all 3 levels (Guided, On Track, Stretch), end to end.
@@ -32,6 +36,11 @@ cd ~/Desktop/be-the-boss && node tests/print-check.js
 - No console errors (a missing optional picture in `/assets` is ignored).
 
 `print-check.js` prints the certificate to PDF and checks it is one page.
+
+`offline-check.js` opens the app both ways it gets used — served over http and
+double-clicked as a file — and checks that the shipped font really loads and
+that **nothing at all is requested from outside the app folder**. This is the
+test that keeps the privacy promise honest.
 
 Screenshots land in `tests/screens/` at Chromebook (1366 × 768) and
 tablet (820 × 1180) size, for all 3 levels and all 8 screens.

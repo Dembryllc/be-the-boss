@@ -24,6 +24,13 @@ cd ~/Desktop/be-the-boss && python3 -m http.server 8080
 To put it on Chromebooks, copy this whole folder to Google Drive or any web
 host. There is nothing to install and nothing to build.
 
+## For the teacher
+
+**[`teacher-guide.html`](teacher-guide.html)** is a printable three-page guide:
+timings for the five steps, what to watch for in each one, what the three
+levels actually change, how to collect work, and what to do when a student says
+their work is gone. Open it in a browser and press Print.
+
 ## Saving, and getting work off the Chromebook
 
 **There is no Save button to hunt for.** Every keystroke saves itself, and a
@@ -68,8 +75,10 @@ files tells you whose is whose at a glance.
   The Save file goes only where the student puts it.
 - Students are told to use a nickname and never type a last name. The saved
   file contains only what they typed into the app.
-- The one network request is the Lexend font from Google Fonts. If the school
-  network blocks it, the app falls back to a system font and still works.
+- **The app makes no network requests at all.** The Lexend font ships in
+  `fonts/`, so it looks and works identically on a locked-down school network,
+  with the wifi off, or from a USB stick. `tests/offline-check.js` enforces
+  this — it fails if anything ever reaches outside the app folder.
 
 ## The five steps
 
@@ -101,13 +110,22 @@ A **Read Aloud** button on every card uses the browser's own speech.
 ## Files
 
 ```
-index.html          all five steps and both finish screens
+index.html          the student app: five steps and both finish screens
+teacher-guide.html  printable guide for running the lesson
+css/fonts.css       the shipped Lexend font
 css/styles.css      the look and feel, plus the level toggle rules
 css/print.css       one-page certificate print layout
-js/state.js         saved progress and the money math
+js/state.js         saved progress, the money math, save and open a file
 js/logo.js          canvas drawing for the logo and poster
 js/steps.js         the five steps, Pitch Day, certificate
 js/app.js           navigation, trail map, read aloud, celebrations
+fonts/              Lexend, plus its licence (OFL.txt)
 assets/README.md    how to drop in your own images later
-tests/              Playwright click-through and screenshots
+tests/              Playwright click-through, print and offline checks
 ```
+
+## Credits
+
+Lexend is © The Lexend Project Authors and is used under the SIL Open Font
+License 1.1 — the full licence is in [`fonts/OFL.txt`](fonts/OFL.txt). All other
+art in the app is original: inline SVG, canvas drawing and emoji.
